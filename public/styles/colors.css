@@ -1,0 +1,32 @@
+
+
+.main {
+    color: black;
+    background-color: white;
+}
+
+.tint {
+    color: lightgray;
+    background-color: lightgray;
+}
+
+.shade {
+    color: darkgray;
+    background-color: darkgray;
+}
+
+.accent {
+    color: #ff0;
+    background-color: gray;
+}
+
+.acc-tint {
+    color: #eec;
+    background-color: gray;
+}
+
+.acc-shade {
+    color: #550;
+    background-color: gray;
+}
+
