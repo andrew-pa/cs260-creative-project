@@ -11,10 +11,9 @@ What people see if they aren't signed in
 
 ### Person homepage (`user.html`)
 The default view when you're signed in
-- [ ] Menu: 'New Group', 'Groups', 'Profile', 'Sign Out'
-- [ ] Sidebar with groups they are members of
-- [ ] Feed
-   - [ ] Posts on feed detailing group events, newest at the top
+- [+] Sidebar with groups they are members of
+- [+] Feed
+   - [+] Posts on feed detailing group events, newest at the top
         - Description, date, maybe a picture, responsible user account, assoc. group
 
 ### Group feed page (`group.html`)

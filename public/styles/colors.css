@@ -1,7 +1,10 @@
 
 
-.main {
+.main-fg {
     color: black;
+}
+
+.main-bg {
     background-color: white;
 }
 
