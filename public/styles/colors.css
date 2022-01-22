@@ -1,35 +1,28 @@
 
+.main-fg { color: rgb(92.06%, 83.56%, 83.14%); }
+.main-bg { background-color: rgb(92.06%, 83.56%, 83.14%); }
+.main-border { border-color: rgb(87.20%, 78.81%, 78.39%); }
 
-.main-fg {
-    color: black;
-}
+.accent-fg { color: rgb(39.73%, 37.85%, 0.89%); }
+.accent-bg { background-color: rgb(39.73%, 37.85%, 0.89%); }
+.accent-border { border-color: rgb(37.67%, 35.97%, 0.00%); }
 
-.main-bg {
-    background-color: white;
-}
+.main-tint-fg { color: rgb(94.66%, 86.53%, 86.12%); }
+.main-tint-bg { background-color: rgb(94.66%, 86.53%, 86.12%); }
+.main-tint-border { border-color: rgb(89.64%, 81.60%, 81.20%); }
 
-.tint {
-    color: lightgray;
-    background-color: lightgray;
-}
+.accent-tint-fg { color: rgb(52.32%, 49.44%, 17.31%); }
+.accent-tint-bg { background-color: rgb(52.32%, 49.44%, 17.31%); }
+.accent-tint-border { border-color: rgb(49.57%, 46.87%, 14.73%); }
 
-.shade {
-    color: darkgray;
-    background-color: darkgray;
-}
+.main-shade-fg { color: rgb(99.34%, 67.79%, 67.03%); }
+.main-shade-bg { background-color: rgb(99.34%, 67.79%, 67.03%); }
+.main-shade-border { border-color: rgb(94.78%, 63.62%, 62.92%); }
 
-.accent {
-    color: #ff0;
-    background-color: gray;
-}
+.accent-shade-fg { color: rgb(34.96%, 34.51%, 0.00%); }
+.accent-shade-bg { background-color: rgb(34.96%, 34.51%, 0.00%); }
+.accent-shade-border { border-color: rgb(33.20%, 32.84%, 0.00%); }
 
-.acc-tint {
-    color: #eec;
-    background-color: gray;
-}
-
-.acc-shade {
-    color: #550;
-    background-color: gray;
-}
+.text { color: rgb(10.14%, 1.93%, 1.31%); }
+.text-gray { color: rgb(25.89%, 19.45%, 19.21%); }
 

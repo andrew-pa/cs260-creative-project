@@ -1,0 +1,14 @@
+# using https://github.com/andrew-pa/unipalette to generate colors
+
+main = l87c8h24
+accent = l40c47h100
+text = main li=3
+text-gray = text li+20
+
+fn tint(x) = x st-5 li+20
+fn shade(x) = x st+20 li-10
+
+fn fg(x) = x
+fn bg(x) = x
+fn border(x) = x li-5
+

@@ -8,9 +8,9 @@
         <link rel="stylesheet" href="/styles/colors.css" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
     </head>
-    <body>
-        <div class="container main">
-            <nav class="navbar navbar-expand-sm row sticky-top navbar-light bg-light justify-content-sm-between">
+    <body class="main-bg text">
+        <div class="container">
+            <nav class="navbar navbar-expand-sm row sticky-top navbar-light main-shade-bg justify-content-sm-between">
                 <a href="#" class="navbar-brand">CommonAgenda</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTarget">
                     <span class="navbar-toggler-icon"></span>
@@ -32,64 +32,64 @@
             </nav>
 
             <div class="row">
-                <div class="col col-sm-5 col-md-3 col-xl-2 sidebar no-display-sm">
+                <div class="col col-sm-5 col-md-4 col-xl-2 sidebar no-display-sm">
                     <div class="profile-md">
                         <img src="#"/>
                         <span>John Douglas</span>
                     </div>
-                    <hr/>
+                    <hr class="main-shade-border"/>
                     <ul class="group-list">
                         <li>
-                            <img src="#"/> <a href="#">4096th YSA Ward</a>
+                            <img src="#"/> <a class="text" href="#">4096th YSA Ward</a>
                         </li>
                         <li>
-                            <img src="#"/> <a href="#">Douglas Family</a>
+                            <img src="#"/> <a class="text" href="#">Douglas Family</a>
                         </li>
                         <li>
-                            <img src="#"/> <a href="#">Goose Watching Club</a>
+                            <img src="#"/> <a class="text" href="#">Goose Watching Club</a>
                         </li>
                         <li>
-                            <img src="#"/> <a href="#">Kevin's Pizza</a>
+                            <img src="#"/> <a class="text" href="#">Kevin's Pizza</a>
                         </li>
                     </ul>
                 </div>
                 <div class="col feed">
-                    <div class="event">
-                        <div class="header">
+                    <div class="event accent-shade-border">
+                        <div class="header main-tint-fg accent-tint-bg">
                             <span>Weekly Goose Watch</span>
                             &mdash;
                             <span class="group-name">Goose Watching Club</span>
                         </div>
                         <div class="info">
                             10:00am on Feburary 10th, 2021
-                            <span class="profile-sm">Hunter Trewin<img src="#"/></span>
+                            <span class="profile-sm text-gray">Hunter Trewin<img src="#"/></span>
                         </div>
                         <img src="#"/>
                         <p class="desc">Come see some lovely geese with us at Everest Park!</p>
                     </div>
 
-                    <div class="event">
-                        <div class="header">
+                    <div class="event accent-shade-border">
+                        <div class="header main-tint-fg accent-tint-bg">
                             <span>Family Reunion</span>
                             &mdash;
                             <span class="group-name">Douglas Family</span>
                         </div>
                         <div class="info">
                             1:00pm on March 13th, 2021
-                            <span class="profile-sm">Bob Douglas<img src="#"/></span>
+                            <span class="profile-sm text-gray">Bob Douglas<img src="#"/></span>
                         </div>
                         <p class="desc">Calling all Douglases! Meet up at Aunt Judy's house</p>
                     </div>
 
-                    <div class="event">
-                        <div class="header">
+                    <div class="event accent-shade-border">
+                        <div class="header main-tint-fg accent-tint-bg">
                             <span>Game Night</span>
                             &mdash;
                             <span class="group-name">4096th YSA Ward</span>
                         </div>
                         <div class="info">
                             7:00am on Marth 23th, 2021
-                            <span class="profile-sm">Quinn Stephens <img src="#"/></span>
+                            <span class="profile-sm text-gray">Quinn Stephens <img src="#"/></span>
                         </div>
                         <img src="#"/>
                         <p class="desc">If you like to play games, you won't want to miss this month's game night!</p>
@@ -98,9 +98,9 @@
                 </div>
             </div>
 
-            <hr class="row"/>
+            <hr class="row main-shade-border"/>
             <div class="row footer justify-content-center">
-                <a href="https://github.com/andrew-pa/cs260-creative-project">View Source on Github</a>
+                <a class="text" href="https://github.com/andrew-pa/cs260-creative-project">View Source on Github</a>
             </div>
         </div>
 

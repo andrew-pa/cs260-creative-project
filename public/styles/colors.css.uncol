@@ -1,0 +1,28 @@
+
+.main-fg { color: ~~!$fg(main)!; }
+.main-bg { background-color: ~~!$bg(main)!; }
+.main-border { border-color: ~~!$border(main)!; }
+
+.accent-fg { color: ~~!$fg(accent)!; }
+.accent-bg { background-color: ~~!$bg(accent)!; }
+.accent-border { border-color: ~~!$border(accent)!; }
+
+.main-tint-fg { color: ~~!$fg(tint(main))!; }
+.main-tint-bg { background-color: ~~!$bg(tint(main))!; }
+.main-tint-border { border-color: ~~!$border(tint(main))!; }
+
+.accent-tint-fg { color: ~~!$fg(tint(accent))!; }
+.accent-tint-bg { background-color: ~~!$bg(tint(accent))!; }
+.accent-tint-border { border-color: ~~!$border(tint(accent))!; }
+
+.main-shade-fg { color: ~~!$fg(shade(main))!; }
+.main-shade-bg { background-color: ~~!$bg(shade(main))!; }
+.main-shade-border { border-color: ~~!$border(shade(main))!; }
+
+.accent-shade-fg { color: ~~!$fg(shade(accent))!; }
+.accent-shade-bg { background-color: ~~!$bg(shade(accent))!; }
+.accent-shade-border { border-color: ~~!$border(shade(accent))!; }
+
+.text { color: ~~!$text!; }
+.text-gray { color: ~~!$text-gray!; }
+

@@ -30,6 +30,10 @@
     justify-content: space-evenly;
 }
 
+a:hover {
+    color: unset !important;
+}
+
 .footer {
     margin-top: 1em;
     margin-bottom: 2em;
@@ -71,8 +75,6 @@
 }
 
 .event .header {
-    background-color: black;
-    color: white;
     padding: 0 1em;
 }
 
