@@ -17,6 +17,8 @@ Selector Part   | Description
 `tint`          | colorway but desaturated (towards white)
 `shade`         | colorway but saturated/darkened (towards black)
 
+Putting `2` after either `tint` or `shade` will get a doubled version of the color that is more extreme.
+
 ## `[placement]`:
 
 Selector Part   | Description

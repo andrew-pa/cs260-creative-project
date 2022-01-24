@@ -23,6 +23,23 @@
 .accent-shade-bg { background-color: ~~!$bg(shade(accent))!; }
 .accent-shade-border { border-color: ~~!$border(shade(accent))!; }
 
+.main-tint2-fg { color: ~~!$fg(tint(tint(main)))!; }
+.main-tint2-bg { background-color: ~~!$bg(tint(tint(main)))!; }
+.main-tint2-border { border-color: ~~!$border(tint(tint(main)))!; }
+
+.accent-tint2-fg { color: ~~!$fg(tint(tint(accent)))!; }
+.accent-tint2-bg { background-color: ~~!$bg(tint(tint(accent)))!; }
+.accent-tint2-border { border-color: ~~!$border(tint(tint(accent)))!; }
+
+.main-shade2-fg { color: ~~!$fg(shade(shade(main)))!; }
+.main-shade2-bg { background-color: ~~!$bg(shade(shade(main)))!; }
+.main-shade2-border { border-color: ~~!$border(shade(shade(main)))!; }
+
+.accent-shade2-fg { color: ~~!$fg(shade(shade(accent)))!; }
+.accent-shade2-bg { background-color: ~~!$bg(shade(shade(accent)))!; }
+.accent-shade2-border { border-color: ~~!$border(shade(shade(accent)))!; }
+
+
 .text { color: ~~!$text!; }
 .text-gray { color: ~~!$text-gray!; }
 

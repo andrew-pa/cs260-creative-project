@@ -14,10 +14,6 @@
   text-align: center;
 }
 
-.day-number {
-}
-
-
 .cal button {
   background: none;
   border-style: none;
@@ -36,7 +32,6 @@
 }
 
 .cal-cell.selected {
-  background-color: #eee;
   font-weight: bold;
 }
 

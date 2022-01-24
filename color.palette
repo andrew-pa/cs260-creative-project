@@ -9,6 +9,6 @@ fn tint(x) = x st-5 li+20
 fn shade(x) = x st+20 li-10
 
 fn fg(x) = x
-fn bg(x) = x
+fn bg(x) = x st-5 li+5
 fn border(x) = x li-5
 
