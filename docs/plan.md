@@ -26,8 +26,8 @@ The newsfeed like listing of events in a group.
 
 ### Person/Group calendar page (`group_cal.html`, `user_cal.html`?)
 The regular ol' calendar style view of events
-- [ ] a month calendar with some events in the boxes
-- [ ] Display month name, way to switch months
+- [+] a month calendar with some events in the boxes
+- [+] Display month name, way to switch months
 - [ ] Menu has a way to get back to the person/group feed page???
 - [ ] New event button to add events to calendar
-- [ ] Retain sidebar from person/group feed page?
+- [+] Retain sidebar from person/group feed page?

@@ -1,0 +1,48 @@
+.feed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2em;
+}
+
+.event {
+    border: 1px solid black;
+    width: 100%;
+    margin: 0 1em 1.5em 1em;
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+@media screen and (min-width: 1000px) {
+    .event {
+        width: 70%;
+    }
+}
+
+.event .header {
+    padding: 0 1em;
+}
+
+.event .header .group-name {
+    font-style: italic;
+}
+
+.event .info {
+    margin: 0.25em 1em 1em 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.event .desc {
+    margin: 0.5em 1em;
+}
+
+.event .event-img {
+    width: 80%;
+    align-self: center;
+}
+
