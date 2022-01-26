@@ -6,20 +6,21 @@
         <title></title>
         <link rel="stylesheet" href="/styles/general.css" />
         <link rel="stylesheet" href="/styles/feed.css" />
+        <link rel="stylesheet" href="/styles/group.css" />
         <link rel="stylesheet" href="/styles/colors.css" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
     </head>
     <body class="main-bg text">
         <div class="container">
             <nav class="navbar navbar-expand-sm row sticky-top navbar-light main-shade2-bg justify-content-sm-between">
-                <a href="#" class="navbar-brand">CommonAgenda</a>
+                <a href="/user" class="navbar-brand">CommonAgenda</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTarget">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarTarget">
                     <ul class="navbar-nav">
                         <li class="nav-item"> <a class="nav-link" href="#">New Group</a> </li>
-                        <li class="nav-item display-sm"> <a class="nav-link" href="#">My Groups</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="#">My Groups</a> </li>
                         <li class="nav-item"> <a class="nav-link" href="/user_cal.html">My Calendar</a> </li>
                         <li class="nav-item nav-profile">
                             <div class="profile-md display-sm">
@@ -34,27 +35,27 @@
 
             <div class="row">
                 <div class="col col-sm-5 col-md-4 col-xl-2 sidebar no-display-sm">
-                    <div class="profile-md">
+                    <div class="group-profile-md">
                         <img src="#"/>
-                        <span>John Douglas</span>
+                        <h1>Goose Watching Club</h1>
+                        <p class="desc">
+                            Could anything be more fun than watching geese? We watch geese weekly, come join us!
+                        </p>
                     </div>
                     <hr class="main-shade-border"/>
                     <ul class="group-list">
-                        <li>
-                            <img src="#"/> <a class="text" href="/group.html">4096th YSA Ward</a>
-                        </li>
-                        <li>
-                            <img src="#"/> <a class="text" href="/group.html">Douglas Family</a>
-                        </li>
-                        <li>
-                            <img src="#"/> <a class="text" href="/group.html">Goose Watching Club</a>
-                        </li>
-                        <li>
-                            <img src="#"/> <a class="text" href="/group.html">Kevin's Pizza</a>
-                        </li>
+                        <li> <a class="text" href="#">Group Calendar</a> </li>
+                        <li> <a class="text" href="#">Group Members</a> </li>
+                        <li> <a class="text" href="#">Invite to this group</a> </li>
+                        <li> <a class="text" href="#">Leave group</a> </li>
                     </ul>
                 </div>
                 <div class="col feed">
+                    <div class="event accent-shade-border new-event">
+                        <div class="header main-tint-fg accent-tint-bg">
+                            <a class="main-tint-fg" href="#">Create New Event</a>
+                        </div>
+                    </div>
                     <div class="event accent-shade-border">
                         <div class="header main-tint-fg accent-tint-bg">
                             <span>Weekly Goose Watch</span>
@@ -71,19 +72,6 @@
 
                     <div class="event accent-shade-border">
                         <div class="header main-tint-fg accent-tint-bg">
-                            <span>Family Reunion</span>
-                            &mdash;
-                            <span class="group-name">Douglas Family</span>
-                        </div>
-                        <div class="info">
-                            1:00pm on March 13th, 2021
-                            <span class="profile-sm text-gray">Bob Douglas<img src="#"/></span>
-                        </div>
-                        <p class="desc">Calling all Douglases! Meet up at Aunt Judy's house</p>
-                    </div>
-
-                    <div class="event accent-shade-border">
-                        <div class="header main-tint-fg accent-tint-bg">
                             <span>Evening Meeting</span>
                             &mdash;
                             <span class="group-name">Goose Watching Club</span>
@@ -93,21 +81,6 @@
                             <span class="profile-sm text-gray">Hunter Trewin<img src="#"/></span>
                         </div>
                         <p class="desc">Come discuss the important business of our club. Elections are coming up!</p>
-                    </div>
-
-
-                    <div class="event accent-shade-border">
-                        <div class="header main-tint-fg accent-tint-bg">
-                            <span>Game Night</span>
-                            &mdash;
-                            <span class="group-name">4096th YSA Ward</span>
-                        </div>
-                        <div class="info">
-                            7:00am on Marth 23th, 2021
-                            <span class="profile-sm text-gray">Quinn Stephens <img src="#"/></span>
-                        </div>
-                        <img class="event-img" src="#"/>
-                        <p class="desc">If you like to play games, you won't want to miss this month's game night!</p>
                     </div>
 
                 </div>

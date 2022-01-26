@@ -15,12 +15,6 @@
     overflow: hidden;
 }
 
-@media screen and (min-width: 1000px) {
-    .event {
-        width: 70%;
-    }
-}
-
 .event .header {
     padding: 0 1em;
 }
@@ -46,3 +40,6 @@
     align-self: center;
 }
 
+.new-event {
+    text-align: center;
+}

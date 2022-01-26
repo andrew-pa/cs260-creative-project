@@ -41,6 +41,15 @@
   margin-bottom: 0.125em;
 }
 
+@media screen and (min-width: 990px) {
+  .day-feed.feed {
+    margin-top: 6.5em;
+  }
+  .event {
+      width: 70%;
+  }
+}
+
 .day-feed .event {
   width: 100%;
 }
