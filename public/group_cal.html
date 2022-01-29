@@ -8,19 +8,20 @@
         <link rel="stylesheet" href="/styles/feed.css" />
         <link rel="stylesheet" href="/styles/group.css" />
         <link rel="stylesheet" href="/styles/colors.css" />
+        <link rel="stylesheet" href="/styles/calendar.css" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
     </head>
     <body class="main-bg text">
         <div class="container">
             <nav class="navbar navbar-expand-sm row sticky-top navbar-light main-shade2-bg justify-content-sm-between">
-                <a href="/user" class="navbar-brand">CommonAgenda</a>
+                <a href="/index.html" class="navbar-brand">CommonAgenda</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTarget">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarTarget">
                     <ul class="navbar-nav">
                         <li class="nav-item"> <a class="nav-link" href="#">New Group</a> </li>
-                        <li class="nav-item"> <a class="nav-link" href="#">My Groups</a> </li>
+                        <li class="nav-item"> <a class="nav-link" href="/user.html">My Groups</a> </li>
                         <li class="nav-item"> <a class="nav-link" href="/user_cal.html">My Calendar</a> </li>
                         <li class="nav-item nav-profile">
                             <div class="profile-md display-sm">
@@ -87,7 +88,6 @@
                             <div class="col cal-cell main-tint2-bg selected">
                                 <span class="day-number">13</span>
                                 <div class="cal-marker accent-bg"></div>
-                                <div class="cal-marker accent-bg"></div>
                             </div>
                         </div>
                         <div class="row">
@@ -122,6 +122,24 @@
                         </div>
                     </div>
                     <!---->
+                    
+                </div>
+                <div class="col-xl-4 day-feed feed">
+    
+                    <div class="event accent-shade-border">
+                        <div class="header main-tint-fg accent-tint-bg">
+                            <span>Evening Meeting</span>
+                            &mdash;
+                            <span class="group-name">Goose Watching Club</span>
+                        </div>
+                        <div class="info">
+                            9:00pm on March 13th, 2021
+                            <span class="profile-sm text-gray">Hunter Trewin<img src="#"/></span>
+                        </div>
+                        <!-- <p class="desc">Come discuss the important business of our club. Elections are coming up!</p> -->
+                    </div>
+
+
                 </div>
             </div>
 
