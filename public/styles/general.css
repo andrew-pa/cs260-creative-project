@@ -65,6 +65,10 @@ a:hover {
     margin-left: 0.4em;
 }
 
+.profile-md img {
+    width: 2.5em;
+}
+
 h1 {
     padding: 1%
 }

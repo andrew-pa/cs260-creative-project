@@ -4,9 +4,27 @@
 }
 
 .group-profile-md img {
-  width: 50%;
+  width: 100%;
 }
 
 .group-profile-md h1 {
   font-size: x-large;
+}
+
+@media screen and (max-width: 575px) {
+  .sidebar {
+    position: relative !important;
+    top: 0px !important;
+  }
+  
+  .group-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .group-list li {
+    margin: 0.5em 1em;
+  }
 }
