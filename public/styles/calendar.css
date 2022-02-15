@@ -37,8 +37,9 @@
 
 .cal-marker {
   width: 100%;
-  height: 0.35em;
-  margin-bottom: 0.125em;
+  height: 1rem;
+  margin-bottom: 0.125rem;
+  font-size: 0.7rem;
 }
 
 @media screen and (min-width: 1200px) {

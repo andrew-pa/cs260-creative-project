@@ -9,8 +9,9 @@
         <link rel="stylesheet" href="/styles/feed.css" />
         <link rel="stylesheet" href="/styles/colors.css" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
+        <script src="scripts/calendar.js"></script>
     </head>
-    <body class="main-bg text">
+    <body class="main-bg text" onload="initUser()">
         <div class="container">
             <nav class="navbar navbar-expand-sm row sticky-top navbar-light main-shade2-bg justify-content-sm-between">
                 <a href="/index.html" class="navbar-brand">CommonAgenda</a>
@@ -59,11 +60,11 @@
                 <div class="container col">
                     <div class="row">
                 <div class="col">
-                    <div class="container cal">
+                    <div class="container cal" id="calendar">
                         <div class="row justify-content-center">
-                            <div class="col-1"><button>&#129092;</button></div>
-                            <h1 class="col">March 2021</h1>
-                            <div class="col-1"><button>&#129094;</button></div>
+                            <div class="col-1"><button onclick="calendarPrevMonth()">&#129092;</button></div>
+                            <h1 class="col" id="calendarTitle">March 2021</h1>
+                            <div class="col-1"><button onclick="calendarNextMonth()">&#129094;</button></div>
                         </div>
                         <div class="row day-titles">
                             <div class="col">Su</div>
@@ -74,60 +75,13 @@
                             <div class="col">F</div>
                             <div class="col">Sa</div>
                         </div>
-                        <div class="row">
-                            <div class="col cal-cell"></div>
-                            <div class="col cal-cell"><span class="day-number">1</span></div>
-                            <div class="col cal-cell"><span class="day-number">2</span></div>
-                            <div class="col cal-cell"><span class="day-number">3</span></div>
-                            <div class="col cal-cell"><span class="day-number">4</span></div>
-                            <div class="col cal-cell"><span class="day-number">5</span></div>
-                            <div class="col cal-cell"><span class="day-number">6</span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col cal-cell"><span class="day-number">7</span></div>
-                            <div class="col cal-cell"><span class="day-number">8</span></div>
-                            <div class="col cal-cell"><span class="day-number">9</span></div>
-                            <div class="col cal-cell"><span class="day-number">10</span></div>
-                            <div class="col cal-cell"><span class="day-number">11</span></div>
-                            <div class="col cal-cell"><span class="day-number">12</span></div>
-                            <div class="col cal-cell main-tint2-bg selected">
-                                <span class="day-number">13</span>
-                                <div class="cal-marker accent-bg"></div>
-                                <div class="cal-marker accent-bg"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col cal-cell"><span class="day-number">14</span></div>
-                            <div class="col cal-cell"><span class="day-number">15</span></div>
-                            <div class="col cal-cell"><span class="day-number">16</span></div>
-                            <div class="col cal-cell"><span class="day-number">17</span></div>
-                            <div class="col cal-cell"><span class="day-number">18</span></div>
-                            <div class="col cal-cell"><span class="day-number">19</span></div>
-                            <div class="col cal-cell"><span class="day-number">20</span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col cal-cell"><span class="day-number">21</span></div>
-                            <div class="col cal-cell"><span class="day-number">22</span></div>
-                            <div class="col cal-cell">
-                                <span class="day-number">23</span>
-                                <div class="cal-marker accent-bg"></div>
-                            </div>
-                            <div class="col cal-cell"><span class="day-number">24</span></div>
-                            <div class="col cal-cell"><span class="day-number">25</span></div>
-                            <div class="col cal-cell"><span class="day-number">26</span></div>
-                            <div class="col cal-cell"><span class="day-number">27</span></div>
-                        </div>
-                        <div class="row">
-                            <div class="col cal-cell"><span class="day-number">28</span></div>
-                            <div class="col cal-cell"><span class="day-number">29</span></div>
-                            <div class="col cal-cell"><span class="day-number">30</span></div>
-                            <div class="col cal-cell"><span class="day-number">31</span></div>
-                            <div class="col cal-cell"></div>
-                            <div class="col cal-cell"></div>
-                            <div class="col cal-cell"></div>
-                        </div>
+                        <div class="row"></div>
+                        <div class="row"></div>
+                        <div class="row"></div>
+                        <div class="row"></div>
+                        <div class="row"></div>
+                        <div class="row"></div>
                     </div>
-                    <!---->
                 </div>
                 <div class="col-xl-4 day-feed feed">
                     <div class="event accent-shade-border">
