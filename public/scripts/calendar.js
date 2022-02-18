@@ -11,6 +11,7 @@ let currentYear = 2021;
 ///     className: the CSS class to apply to the tag, default is 'accent-bg' if not defined
 ///     title: the text to put inside the tag element, default is blank if not defined
 /// }
+/// Each event source will be invoked with `null` at the start of calendar generation so they can do any per-month calculation/data fetching
 let eventSources = [];
 
 /// generate the calendar HTML for currentMonth, currentYear
@@ -23,6 +24,9 @@ function calendarGenerate() {
         el.innerHTML = title || '';
         return el;
     }
+
+    // make sure event sources are initialized for this month
+    eventSources.forEach(es => es(null));
 
     // recreate the main calender
     let calendarDiv = document.getElementById('calendar');
@@ -57,9 +61,10 @@ function calendarGenerate() {
 }
 
 ////// event source functions
-const saturnDay = date => date.getDay() == 6 ? [ {title: '🪐', className: 'accent-tint-bg'} ] : [];
+const saturnDay = date => date && date.getDay() == 6 ? [ {title: '🪐', className: 'accent-tint-bg'} ] : [];
 
 function dummyUserEvents(date) {
+    if(!date) return;
     if(date.getMonth() == 2) {
         if(date.getDate() == 13) {
             return [{}, {}];
@@ -71,6 +76,7 @@ function dummyUserEvents(date) {
 }
 
 function dummyGroupEvents(date) {
+    if(!date) return;
     if(date.getMonth() == 2) {
         if(date.getDate() == 13) {
             return [{}];
