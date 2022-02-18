@@ -1,3 +1,5 @@
+////// API keys
+const openWeatherKey = '56e0643578fe6d6234b3759abeb73aad';
 
 ////// global variables
 const monthNames = ['January','Feburary','March','April','May','June','July','August','September','October','November','December'];
@@ -15,18 +17,20 @@ let currentYear = 2021;
 let eventSources = [];
 
 /// generate the calendar HTML for currentMonth, currentYear
-function calendarGenerate() {
+async function calendarGenerate() {
 
     /// this function generates a DOM element from a calendar event returned from an event source function
-    function generateTagFromEvent({className, title}) {
+    function generateTagFromEvent(event) {
         let el = document.createElement('div');
-        el.className = 'cal-marker ' + (className || 'accent-bg');
-        el.innerHTML = title || '';
+        el.className = 'cal-marker ' + (event.className || 'accent-bg');
+        el.innerHTML = event.title || '';
         return el;
     }
 
     // make sure event sources are initialized for this month
-    eventSources.forEach(es => es(null));
+    for(var e in eventSources) {
+        await eventSources[e](null);
+    }
 
     // recreate the main calender
     let calendarDiv = document.getElementById('calendar');
@@ -45,8 +49,13 @@ function calendarGenerate() {
                 dayDiv.appendChild(dayNumber);
 
                 // query for any events happening on this day
-                eventSources.map(source => source(currentDay) || [])
-                    .reduce((a,e) => a.concat(e), [])
+                let events = [];
+                for(var source of eventSources) {
+                    let ev = await source(currentDay);
+                    if(ev) events = events.concat(ev);
+                }
+                // console.log(events);
+                events
                     .map(generateTagFromEvent)
                     .forEach(e => dayDiv.appendChild(e));
 
@@ -87,6 +96,25 @@ function dummyGroupEvents(date) {
     }
 }
 
+//// 16-day weather forecast
+let forecastData = null;
+async function loadForecastData() {
+    const location = { lat: 40.24, lon: -111.65 };
+    forecastData = await (await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${location.lat}&lon=${location.lon}&exclude=current,minutely,hourly,alerts&units=imperial&appid=${openWeatherKey}`)).json();
+}
+
+async function weatherForcast(date) {
+    if(date == null) {
+        await loadForecastData();
+    } else {
+        if(!forecastData) return [];
+        let start_of_day = date.getTime() / 1000; // Javascript time is in milliseconds but OpenWeatherMap returns seconds
+        let end_of_day = start_of_day + 3600*24;
+        let res = forecastData.daily.filter(df => start_of_day <= df.dt && df.dt <= end_of_day);
+        return res;
+    }
+}
+
 ////// input event handlers
 function calendarPrevMonth() {
     currentMonth = currentMonth-1;
@@ -111,12 +139,12 @@ function calendarNextMonth() {
 
 /// init the `user_cal.html` page
 function initUser() {
-    eventSources = [saturnDay, dummyUserEvents];
+    eventSources = [saturnDay, dummyUserEvents, weatherForcast];
     calendarGenerate();
 }
 
 /// init the `group_cal.html` page
 function initGroup() {
-    eventSources = [saturnDay, dummyGroupEvents];
+    eventSources = [saturnDay, dummyGroupEvents, weatherForcast];
     calendarGenerate();
 }
