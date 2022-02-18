@@ -4,14 +4,15 @@ const openWeatherKey = '56e0643578fe6d6234b3759abeb73aad';
 ////// global variables
 const monthNames = ['January','Feburary','March','April','May','June','July','August','September','October','November','December'];
 
-let currentMonth = 2; // March
-let currentYear = 2021;
+let currentMonth = 1; // March
+let currentYear = 2022;
 
 /// this is the list of all event sources for the current calendar
 /// an event source is a function of type `Date -> [Event]` where an event is an object as follows:
 /// Event {
 ///     className: the CSS class to apply to the tag, default is 'accent-bg' if not defined
 ///     title: the text to put inside the tag element, default is blank if not defined
+///     priority: the sort order of the event, user-generated events are at priority 0, higher will go before, lower will go after
 /// }
 /// Each event source will be invoked with `null` at the start of calendar generation so they can do any per-month calculation/data fetching
 let eventSources = [];
@@ -28,9 +29,7 @@ async function calendarGenerate() {
     }
 
     // make sure event sources are initialized for this month
-    for(var e in eventSources) {
-        await eventSources[e](null);
-    }
+    await Promise.all(eventSources.map(src => src(null)));
 
     // recreate the main calender
     let calendarDiv = document.getElementById('calendar');
@@ -49,13 +48,11 @@ async function calendarGenerate() {
                 dayDiv.appendChild(dayNumber);
 
                 // query for any events happening on this day
-                let events = [];
-                for(var source of eventSources) {
-                    let ev = await source(currentDay);
-                    if(ev) events = events.concat(ev);
-                }
+                let events = await Promise.all(eventSources.map(src => src(currentDay)))
+                    .then(ev => ev.reduce((e,es) => es ? e.concat(es) : e, []));
                 // console.log(events);
                 events
+                    .sort((a,b) => (b.priority||0)-(a.priority||0))
                     .map(generateTagFromEvent)
                     .forEach(e => dayDiv.appendChild(e));
 
@@ -110,7 +107,12 @@ async function weatherForcast(date) {
         if(!forecastData) return [];
         let start_of_day = date.getTime() / 1000; // Javascript time is in milliseconds but OpenWeatherMap returns seconds
         let end_of_day = start_of_day + 3600*24;
-        let res = forecastData.daily.filter(df => start_of_day <= df.dt && df.dt <= end_of_day);
+        let res = forecastData.daily
+            .filter(df => start_of_day <= df.dt && df.dt <= end_of_day)
+            .map(df => ({title: `<img src="https://openweathermap.org/img/wn/${df.weather[0].icon}.png"/><span>${df.temp.day.toFixed(0)}&deg;</span>`, className: 'weather-event', priority: 10}));
+                //`${df.temp.min}&deg;/${df.temp.max}&deg;`}));
+        // console.log(start_of_day, end_of_day, forecastData.daily);
+        console.log(res);
         return res;
     }
 }

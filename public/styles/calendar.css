@@ -29,6 +29,7 @@
   border-collapse: collapse;
   height: 8vh;
   padding: 0 0.3em !important;
+  overflow-y: hidden;
 }
 
 .cal-cell.selected {
@@ -40,6 +41,8 @@
   height: 1rem;
   margin-bottom: 0.125rem;
   font-size: 0.7rem;
+  border-radius: 0.25em;
+  overflow-y: hidden;
 }
 
 @media screen and (min-width: 1200px) {
@@ -55,3 +58,13 @@
   width: 100%;
 }
 
+
+.weather-event {
+    background: gray;
+}
+
+.weather-event img {
+  height: 1.5em;
+  width: 1.5em;
+  margin-bottom: 0.15em;
+}
