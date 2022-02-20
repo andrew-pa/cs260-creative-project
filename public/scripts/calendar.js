@@ -1,5 +1,6 @@
 ////// API keys
 const openWeatherKey = '56e0643578fe6d6234b3759abeb73aad';
+const calendarificKey = '69c323394f50778418898f095023df1cab1fc82f';
 
 ////// global variables
 const monthNames = ['January','Feburary','March','April','May','June','July','August','September','October','November','December'];
@@ -117,6 +118,26 @@ async function weatherForcast(date) {
     }
 }
 
+//// Calendar Holidays
+let holidayData = null;
+async function loadHolidays(date) {
+    holidayData = await (await fetch(`https://calendarific.com/api/v2/holidays?&api_key=${calendarificKey}&country=US&year=2022`)).json();
+    holidayData = holidayData.response.holidays;
+}
+
+async function getHolidays(date) {
+    if (date == null) {
+        await loadHolidays(date);
+    } else {
+        if (!holidayData) return [];
+        holidayData.forEach(holi => { holi.title = holi.name;
+                                      holi.className = 'holiday'; });
+            //console.log(holidayData)
+        return holidayData.filter(holi => holi.date.datetime.month == (date.getMonth()+1) && holi.date.datetime.day == date.getDate() && holi.type.includes('National holiday'));
+            
+    }
+}
+
 ////// input event handlers
 function calendarPrevMonth() {
     currentMonth = currentMonth-1;
@@ -141,12 +162,12 @@ function calendarNextMonth() {
 
 /// init the `user_cal.html` page
 function initUser() {
-    eventSources = [saturnDay, dummyUserEvents, weatherForcast];
+    eventSources = [saturnDay, dummyUserEvents,  getHolidays];
     calendarGenerate();
 }
 
 /// init the `group_cal.html` page
 function initGroup() {
-    eventSources = [saturnDay, dummyGroupEvents, weatherForcast];
+    eventSources = [saturnDay, dummyGroupEvents,  getHolidays];
     calendarGenerate();
 }

@@ -68,3 +68,9 @@
   width: 1.5em;
   margin-bottom: 0.15em;
 }
+
+.holiday {
+    color: white;
+    background-color: red;
+    font-size: 0.01rem;
+}
