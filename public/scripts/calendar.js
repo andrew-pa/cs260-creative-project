@@ -1,6 +1,7 @@
 ////// API keys
 let secrets = {
-    openWeatherMap: '<secret-key>'
+    openWeatherMap: '<secret-key>',
+    calendarific: '<secret-key>'
 };
 
 async function fetchSecrets() {
@@ -10,7 +11,7 @@ async function fetchSecrets() {
 ////// global variables
 const monthNames = ['January','Feburary','March','April','May','June','July','August','September','October','November','December'];
 
-let currentMonth = 1; // March
+let currentMonth = 1; // Feburary
 let currentYear = 2022;
 
 /// this is the list of all event sources for the current calendar
@@ -56,7 +57,6 @@ async function calendarGenerate() {
                 // query for any events happening on this day
                 let events = await Promise.all(eventSources.map(src => src(currentDay)))
                     .then(ev => ev.reduce((e,es) => es ? e.concat(es) : e, []));
-                // console.log(events);
                 events
                     .sort((a,b) => (b.priority||0)-(a.priority||0))
                     .map(generateTagFromEvent)
@@ -116,10 +116,27 @@ async function weatherForcast(date) {
         let res = forecastData.daily
             .filter(df => start_of_day <= df.dt && df.dt <= end_of_day)
             .map(df => ({title: `<img src="https://openweathermap.org/img/wn/${df.weather[0].icon}.png"/><span>${df.temp.day.toFixed(0)}&deg;</span>`, className: 'weather-event', priority: 10}));
-                //`${df.temp.min}&deg;/${df.temp.max}&deg;`}));
-        // console.log(start_of_day, end_of_day, forecastData.daily);
-        console.log(res);
         return res;
+    }
+}
+
+//// Calendar Holidays
+let holidayData = null;
+async function loadHolidays(date) {
+    holidayData = await (await fetch(`https://calendarific.com/api/v2/holidays?&api_key=${secrets.calendarific}&country=US&year=${currentYear}&month=${currentMonth+1}&type=national`)).json();
+    holidayData = holidayData.response.holidays;
+}
+
+async function getHolidays(date) {
+    if (date == null) {
+        await loadHolidays(date);
+    } else {
+        if (!holidayData) return [];
+        holidayData.forEach(holi => {
+            holi.title = holi.name;
+            holi.className = 'holiday';
+        });
+        return holidayData.filter(holi => holi.date.datetime.day == date.getDate());
     }
 }
 
@@ -147,14 +164,14 @@ function calendarNextMonth() {
 
 /// init the `user_cal.html` page
 async function initUser() {
-    eventSources = [saturnDay, dummyUserEvents, weatherForcast];
+    eventSources = [dummyUserEvents, weatherForcast, getHolidays];
     await fetchSecrets();
     await calendarGenerate();
 }
 
 /// init the `group_cal.html` page
 async function initGroup() {
-    eventSources = [saturnDay, dummyGroupEvents, weatherForcast];
+    eventSources = [dummyGroupEvents, weatherForcast, getHolidays];
     await fetchSecrets();
     await calendarGenerate();
 }
