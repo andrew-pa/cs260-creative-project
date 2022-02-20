@@ -1,5 +1,11 @@
 ////// API keys
-const openWeatherKey = '56e0643578fe6d6234b3759abeb73aad';
+let secrets = {
+    openWeatherMap: '<secret-key>'
+};
+
+async function fetchSecrets() {
+    secrets = await (await fetch('/secrets.json')).json();
+}
 
 ////// global variables
 const monthNames = ['January','Feburary','March','April','May','June','July','August','September','October','November','December'];
@@ -97,7 +103,7 @@ function dummyGroupEvents(date) {
 let forecastData = null;
 async function loadForecastData() {
     const location = { lat: 40.24, lon: -111.65 };
-    forecastData = await (await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${location.lat}&lon=${location.lon}&exclude=current,minutely,hourly,alerts&units=imperial&appid=${openWeatherKey}`)).json();
+    forecastData = await (await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${location.lat}&lon=${location.lon}&exclude=current,minutely,hourly,alerts&units=imperial&appid=${secrets.openWeatherMap}`)).json();
 }
 
 async function weatherForcast(date) {
@@ -140,13 +146,15 @@ function calendarNextMonth() {
 /// these functions are called when the page is loaded, setting up the event source list and initial calendar
 
 /// init the `user_cal.html` page
-function initUser() {
+async function initUser() {
     eventSources = [saturnDay, dummyUserEvents, weatherForcast];
-    calendarGenerate();
+    await fetchSecrets();
+    await calendarGenerate();
 }
 
 /// init the `group_cal.html` page
-function initGroup() {
+async function initGroup() {
     eventSources = [saturnDay, dummyGroupEvents, weatherForcast];
-    calendarGenerate();
+    await fetchSecrets();
+    await calendarGenerate();
 }

@@ -12,6 +12,11 @@
 
 .cal h1 {
   text-align: center;
+  font-size: calc(min(7vw,1.8rem));
+}
+
+.cal .col-1 {
+  min-width: max-content;
 }
 
 .cal button {
