@@ -1,5 +1,3 @@
-/**/
-
 
 .container .cal {
   margin-top: 1em;
@@ -63,7 +61,6 @@
   width: 100%;
 }
 
-
 .weather-event {
     background: gray;
 }
@@ -72,4 +69,11 @@
   height: 1.5em;
   width: 1.5em;
   margin-bottom: 0.15em;
+}
+
+.holiday {
+  color: white;
+  background-color: orangered;
+  font-size: 0.5rem;
+  padding: 0.1rem 0.25rem;
 }

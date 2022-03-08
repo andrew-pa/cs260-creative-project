@@ -6,7 +6,7 @@
 
 @media screen and (min-width: 575px) {
     .display-sm {
-        display: none;
+        display: none !important;
     }
     
     #navbarTarget {
@@ -16,7 +16,7 @@
 
 @media screen and (max-width: 575px) {
     .no-display-sm {
-        display: none;
+        display: none !important;
     }
 }
 
@@ -26,8 +26,12 @@
 
 .nav-profile {
     display: flex;
-    align-items: baseline;
-    justify-content: space-evenly;
+    align-items: center;
+    justify-content: left;
+}
+
+.nav-profile img {
+    margin-right: 1em;
 }
 
 a:hover {
