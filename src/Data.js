@@ -67,29 +67,29 @@ export function useAppData() {
 
 const mockEvents = [
     {
-        id: 'e1', title: 'Weekly Goose Watch', date: new Date('2022-3-10T10:00:00'),
+        id: 'e1', title: 'Weekly Goose Watch', date: new Date('2022-3-10 10:00:00'),
         groupId: 'group3', author: makeMockProfile('Greg Goobanik'),
         imgSrc: '/images/goose1.jpg',
         desc: 'Come see some lovely geese with us at Everest Park'
     },
     {
-        id: 'e2', title: 'Family Reunion', date: new Date('2022-3-13T13:00:00'),
+        id: 'e2', title: 'Family Reunion', date: new Date('2022-3-13 13:00:00'),
         groupId: 'group2', author: makeMockProfile('Bob Douglas'),
         desc: 'Calling all Douglases! Meet up at Aunt Judy\'s house'
     },
     {
-        id: 'e3', title: 'Evening Meeting', date: new Date('2022-3-13T21:30:00'),
+        id: 'e3', title: 'Evening Meeting', date: new Date('2022-3-13 21:30:00'),
         groupId: 'group3', author: makeMockProfile('Greg Goobanik'),
         desc: 'Come discuss the important business of our club. Elections are coming up!'
     },
     {
-        id: 'e4', title: 'Game Night', date: new Date('2022-3-23T20:00:00'),
+        id: 'e4', title: 'Game Night', date: new Date('2022-3-23 20:00:00'),
         groupId: 'group1', author: makeMockProfile('Quinn Stephens'),
         imgSrc: '/images/game.jpg',
         desc: "If you like to play games, you won't want to miss this month's game night!"
     },
     {
-        id: 'e5', title: 'All You Can Eat Wednesday', date: new Date('2022-4-6T17:00:00'),
+        id: 'e5', title: 'All You Can Eat Wednesday', date: new Date('2022-4-6 17:00:00'),
         groupId: 'group4', author: makeMockProfile('Kevin Roberts'),
         desc: 'Come scarf down as much pizza as you can get you hands on!'
     }

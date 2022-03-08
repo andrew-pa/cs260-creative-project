@@ -31,6 +31,7 @@ function UserView({user, element}) {
         </>
     );
 }
+
 export function UserFeedView({user}) {
     return (<UserView user={user} element={() => "feed"}/>);
 }

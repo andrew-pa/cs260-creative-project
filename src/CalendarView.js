@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Button } from 'react-bootstrap';
 import './styles/calendar.css';
+import { useSecrets, useWeatherData } from './ExternData.js';
 
 function mapRange(start, end, fn) {
     let result = [];
@@ -11,20 +12,52 @@ function mapRange(start, end, fn) {
     return result;
 }
 
-const monthNames = ['January','Feburary','March','April','May','June','July','August','September','October','November','December'];
+function dateEq(a, b) {
+    return a.getYear() == b.getYear()
+        && a.getMonth() == b.getMonth()
+        && a.getDate() == b.getDate();
+}
 
-function CalendarCell({date}) {
+const monthNames = [
+    'January','Feburary','March','April','May','June','July','August','September','October','November','December'
+];
+
+function CalendarCell({date, children, selected, onSelect, today, dayForecast}) {
     return (
-        <div className="col cal-cell">
+        <div onClick={onSelect} className="col cal-cell">
+            <div style={{display:'flex', justifyContent: 'space-between', margin: '0.2rem 0rem', flexWrap: 'wrap'}}>
             {date &&
-                <span className="day-number">{date.getDate()}</span>}
+                <div className={"day-number " + (selected && " accent-tint-bg main-fg")}
+                    style={{fontWeight: today?'bold':'normal'}}>
+                    {date.getDate()}
+                </div>}
+            {dayForecast &&
+                <div className="weather-event">
+                    <img src={`https://openweathermap.org/img/wn/${dayForecast.weather[0].icon}.png`}/>
+                    <span>{dayForecast.temp.day.toFixed(0)}&deg;</span>
+                </div>}
+            </div>
+            {children}
+        </div>
+    );
+}
+
+function EventTag({data}) {
+    return (
+        <div className={"cal-marker accent-bg"}>
+            <span className="main-fg">{data.title}</span>
         </div>
     );
 }
 
 export function CalendarView({data}) {
-    let [currentYear, setCurrentYear] = useState(2022);
-    let [currentMonth, setCurrentMonth] = useState(2);
+    const now = new Date();
+    const [currentYear, setCurrentYear] = useState(now.getYear() + 1900);
+    const [currentMonth, setCurrentMonth] = useState(now.getMonth());
+    const [selectedDay, setSelectedDay] = useState(now.getDate());
+
+    const secrets = useSecrets();
+    const currentForecast = useWeatherData(secrets);
 
     // recreate the main calendar
     let calRows = [];
@@ -34,17 +67,21 @@ export function CalendarView({data}) {
         for(let col = 0; col < 7; ++col) {
             // make sure we're still in the month, skipping the first and last couple boxes if necessary
             if(currentDay.getDay() == col && currentDay.getMonth() == currentMonth) {
-                calRow.push(<CalendarCell key={col} date={new Date(currentDay)}/>);
-
-                // query for any events happening on this day
-                /*let events = await Promise.all(eventSources.map(src => src(currentDay)))
-                    .then(ev => ev.reduce((e,es) => es ? e.concat(es) : e, []));
-                events
-                    .sort((a,b) => (b.priority||0)-(a.priority||0))
-                    .map(generateTagFromEvent)
-                    .forEach(e => dayDiv.appendChild(e));*/
-
-                    currentDay.setDate(currentDay.getDate()+1);
+                let currentDate = currentDay.getDate();
+                let start_of_day = currentDay.getTime() / 1000;
+                let end_of_day = start_of_day + 3600*24;
+                calRow.push(
+                    <CalendarCell
+                        key={col} date={new Date(currentDay)}
+                        today={dateEq(now, currentDay)} selected={selectedDay == currentDate}
+                        onSelect={()=>setSelectedDay(currentDate)}
+                        dayForecast={currentForecast?.filter(df => start_of_day <= df.dt && df.dt <= end_of_day)[0]}
+                    >
+                        {data.events.filter(ev => dateEq(ev.date, currentDay))
+                                    .map(ev => <EventTag key={ev.id} data={ev}/>)}
+                    </CalendarCell>
+                );
+                currentDay.setDate(currentDay.getDate()+1);
             } else {
                 calRow.push(<CalendarCell key={col} date={null}/>);
             }
