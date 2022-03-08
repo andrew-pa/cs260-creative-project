@@ -17,16 +17,6 @@
   min-width: max-content;
 }
 
-.cal button {
-  background: none;
-  border-style: none;
-  padding: 0.5em;
-}
-
-.cal button:active {
-  background: #eee;
-}
-
 .cal-cell {
   border: 0.5px solid;
   border-collapse: collapse;

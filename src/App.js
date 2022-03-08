@@ -6,17 +6,18 @@ import './styles/colors.css';
 
 import {
     BrowserRouter as Router,
-    Routes, Route, Link
+    Routes, Route, NavLink
 } from "react-router-dom";
 
 import { Navbar, Nav, Container } from 'react-bootstrap';
 
-import { useData } from './Data.js';
+import { useAppData } from './Data.js';
 
 import { LoginModal } from './LoginModal.js';
-import { UserFeedView } from './UserViews.js';
+import { UserFeedView, UserCalendarView } from './UserViews.js';
 
 /* TODO:
+    * Make logout return to homepage if you're not there already
     * Write unipalette bootstrap theme thing
     * Sign up flow
 */
@@ -25,18 +26,18 @@ function Header({showLogin, data}) {
     return (<>
         <Navbar bg="light" expand="sm" className="row main-shade2-bg">
             <Container>
-                <Navbar.Brand>CommonAgenda</Navbar.Brand>
+                <Navbar.Brand as={NavLink} to="/">CommonAgenda</Navbar.Brand>
                 <Navbar.Toggle/>
                 <Navbar.Collapse>
                     <Nav className="sm-auto">
-                        {data.signedIn ?
+                        {data.user ?
                             <>
                                 <Nav.Link>New Group</Nav.Link>
                                 <Nav.Link>My Groups</Nav.Link>
-                                <Nav.Link>My Calendar</Nav.Link>
+                                <Nav.Link as={NavLink} to="/user-cal">My Calendar</Nav.Link>
                                 <div className="nav-profile profile-md display-sm">
-                                    <img src={data.profile.avatarSrc}/>
-                                    <Nav.Link>{data.profile.name}</Nav.Link>
+                                    <img src={data.user.avatarSrc}/>
+                                    <Nav.Link>{data.user.name}</Nav.Link>
                                 </div>
                                 <Nav.Link onClick={data.logout}>Sign Out</Nav.Link>
                             </>
@@ -54,14 +55,12 @@ function Header({showLogin, data}) {
 
 function Footer() {
     return (
-        <>
-        <hr className="row main-shade-border"/>
         <div className="row footer justify-content-center">
+            <hr className="main-shade-border"/>
             <p className="col"><i>By Andrew & James Palmer</i></p>
             <a className="col text" style={{textAlign: "right"}} href="https://github.com/andrew-pa/cs260-creative-project">View Source on Github</a>
         </div>
-        </>
-    )
+    );
 }
 
 function AboutPage() {
@@ -80,9 +79,9 @@ function AboutPage() {
 }
 
 function App() {
-    const data = useData();
+    const data = useAppData();
 
-    const [loginVisible, setLoginVisible] = useState(true);
+    const [loginVisible, setLoginVisible] = useState(false);
 
     return (
         <Router>
@@ -90,10 +89,13 @@ function App() {
                 <Header data={data}
                         showLogin={() => setLoginVisible(true)}/>
 
-                <div className="row">
+                <div className="row mt-3">
                     <Routes>
-                        <Route exact path="/" element={!data.signedIn ? <AboutPage/>
-                                                                      : <UserFeedView data={data}/>}/>
+                        <Route exact path="/" element={!data.user ? <AboutPage/>
+                                                                      : <UserFeedView user={data.user}/>}/>
+                        {data.user && (
+                            <Route path="/user-cal" element={<UserCalendarView user={data.user}/>}/>
+                        )}
                     </Routes>
                 </div>
 
