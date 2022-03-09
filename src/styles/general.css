@@ -80,3 +80,18 @@ a:hover {
 h1 {
     padding: 1%
 }
+
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+
+  > .col,
+  > [class*="col-"] {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+ol, ul {
+    padding-left: 0.2rem !important;
+}

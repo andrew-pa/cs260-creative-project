@@ -1,4 +1,19 @@
 
+# Project #3 TODO:
+
+- Feed view
+- User feed
+- Group calendar
+- Group feed
+- User groups list for mobile
+- New flows?
+    - New event
+    - Registration
+    - New Group
+- Add more mock data for other groups
+- Fix TODOs left in the code
+
+
 # Project #1:
 
 ## Pages

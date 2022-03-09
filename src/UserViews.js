@@ -6,7 +6,7 @@ import { CalendarView } from './CalendarView.js';
 // Generic user-focused view with the user-oriented sidebar to the left and element component to the right
 // the `element` function will be called with the user event data object as a prop
 function UserView({user, element}) {
-    const events = useUserEvents();
+    const data = useUserEvents();
 
     return (
         <>
@@ -25,8 +25,8 @@ function UserView({user, element}) {
                 ))}
             </ul>
         </div>
-        <div className="container col">
-            {React.createElement(element, {data: events})}
+        <div className="container col row no-gutters">
+            {element(data)}
         </div>
         </>
     );
@@ -37,5 +37,5 @@ export function UserFeedView({user}) {
 }
 
 export function UserCalendarView({user}) {
-    return (<UserView user={user} element={CalendarView}/>);
+    return (<UserView user={user} element={(data) => <CalendarView events={data.events}/>}/>);
 }

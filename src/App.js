@@ -24,7 +24,7 @@ import { UserFeedView, UserCalendarView } from './UserViews.js';
 
 function Header({showLogin, data}) {
     return (<>
-        <Navbar bg="light" expand="sm" className="row main-shade2-bg">
+        <Navbar sticky="top" bg="light" expand="sm" className="row main-shade2-bg">
             <Container>
                 <Navbar.Brand as={NavLink} to="/">CommonAgenda</Navbar.Brand>
                 <Navbar.Toggle/>
@@ -33,7 +33,7 @@ function Header({showLogin, data}) {
                         {data.user ?
                             <>
                                 <Nav.Link>New Group</Nav.Link>
-                                <Nav.Link>My Groups</Nav.Link>
+                                <Nav.Link className="display-sm">My Groups</Nav.Link>
                                 <Nav.Link as={NavLink} to="/user-cal">My Calendar</Nav.Link>
                                 <div className="nav-profile profile-md display-sm">
                                     <img src={data.user.avatarSrc}/>

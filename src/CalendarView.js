@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Button } from 'react-bootstrap';
 import './styles/calendar.css';
-import { useSecrets, useWeatherData } from './ExternData.js';
+import { useSecrets, useWeatherData, useHolidayData } from './ExternData.js';
 
 function mapRange(start, end, fn) {
     let result = [];
@@ -26,16 +26,16 @@ function CalendarCell({date, children, selected, onSelect, today, dayForecast}) 
     return (
         <div onClick={onSelect} className="col cal-cell">
             <div style={{display:'flex', justifyContent: 'space-between', margin: '0.2rem 0rem', flexWrap: 'wrap'}}>
-            {date &&
-                <div className={"day-number " + (selected && " accent-tint-bg main-fg")}
-                    style={{fontWeight: today?'bold':'normal'}}>
-                    {date.getDate()}
-                </div>}
-            {dayForecast &&
-                <div className="weather-event">
-                    <img src={`https://openweathermap.org/img/wn/${dayForecast.weather[0].icon}.png`}/>
-                    <span>{dayForecast.temp.day.toFixed(0)}&deg;</span>
-                </div>}
+                {date &&
+                    <div className={"day-number " + (selected && " accent-tint-bg main-fg")}
+                        style={{fontWeight: today?'bold':'normal'}}>
+                        {date.getDate()}
+                    </div>}
+                {dayForecast &&
+                    <div className="weather-event">
+                        <img src={`https://openweathermap.org/img/wn/${dayForecast.weather[0].icon}.png`}/>
+                        <span>{dayForecast.temp.day.toFixed(0)}&deg;</span>
+                    </div>}
             </div>
             {children}
         </div>
@@ -50,7 +50,7 @@ function EventTag({data}) {
     );
 }
 
-export function CalendarView({data}) {
+export function CalendarView({events}) {
     const now = new Date();
     const [currentYear, setCurrentYear] = useState(now.getYear() + 1900);
     const [currentMonth, setCurrentMonth] = useState(now.getMonth());
@@ -58,6 +58,7 @@ export function CalendarView({data}) {
 
     const secrets = useSecrets();
     const currentForecast = useWeatherData(secrets);
+    const holidays = useHolidayData(secrets, currentMonth, currentYear);
 
     // recreate the main calendar
     let calRows = [];
@@ -77,8 +78,12 @@ export function CalendarView({data}) {
                         onSelect={()=>setSelectedDay(currentDate)}
                         dayForecast={currentForecast?.filter(df => start_of_day <= df.dt && df.dt <= end_of_day)[0]}
                     >
-                        {data.events.filter(ev => dateEq(ev.date, currentDay))
-                                    .map(ev => <EventTag key={ev.id} data={ev}/>)}
+                        {events
+                            .filter(ev => dateEq(ev.date, currentDay))
+                            .map(ev => <EventTag key={ev.id} data={ev}/>)}
+                        {holidays?.data
+                                ?.filter(h => h.data.datetime.day == currentDate)
+                                .map((h,i) => <EventTag key={`holiday${i}`} data={{title: h.name}}/>)}
                     </CalendarCell>
                 );
                 currentDay.setDate(currentDay.getDate()+1);
@@ -110,7 +115,8 @@ export function CalendarView({data}) {
     }
 
     return (
-        <div className="container cal" id="calendar">
+        <>
+        <div className="container cal col" id="calendar">
             <div className="row justify-content-center">
                 <div className="col-1"><Button onClick={prevMonth}>&#129092;</Button></div>
                 <h1 className="col" id="calendarTitle">{monthNames[currentMonth] + ' ' + currentYear}</h1>
@@ -127,5 +133,9 @@ export function CalendarView({data}) {
             </div>
             {calRows}
         </div>
+        <div className="col-xl-4 day-feed feed">
+            {"feed for selected day"}
+        </div>
+        </>
     );
 }
