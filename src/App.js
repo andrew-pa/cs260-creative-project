@@ -9,12 +9,13 @@ import {
     Routes, Route, NavLink
 } from "react-router-dom";
 
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 
 import { useAppData } from './Data.js';
 
 import { LoginModal } from './LoginModal.js';
 import { UserFeedView, UserCalendarView } from './UserViews.js';
+import { GroupFeedView, GroupCalendarView, GroupMemberView } from './GroupViews.js';
 
 /* TODO:
     * Make logout return to homepage if you're not there already
@@ -33,11 +34,18 @@ function Header({showLogin, data}) {
                         {data.user ?
                             <>
                                 <Nav.Link>New Group</Nav.Link>
-                                <Nav.Link className="display-sm">My Groups</Nav.Link>
+                                <NavDropdown className="isplay-sm" title="My Groups">
+                                    {data.user.groups.map(group => (
+                                        <NavDropdown.Item key={group.id}>
+                                            <img style={{marginRight: '0.5rem'}} src={group.iconSrc}/>
+                                            <NavLink to={"/group/" + group.id}>{group.name}</NavLink>
+                                        </NavDropdown.Item>
+                                    ))}
+                                </NavDropdown>
                                 <Nav.Link as={NavLink} to="/user-cal">My Calendar</Nav.Link>
                                 <div className="nav-profile profile-md display-sm">
                                     <img src={data.user.avatarSrc}/>
-                                    <Nav.Link>{data.user.name}</Nav.Link>
+                                    <Nav.Link as={NavLink} to="/">{data.user.name}</Nav.Link>
                                 </div>
                                 <Nav.Link onClick={data.logout}>Sign Out</Nav.Link>
                             </>
@@ -93,8 +101,12 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={!data.user ? <AboutPage/>
                                                                       : <UserFeedView user={data.user}/>}/>
-                        {data.user && (
+                        {data.user && (<>
                             <Route path="/user-cal" element={<UserCalendarView user={data.user}/>}/>
+                            <Route path="/group/:id" element={<GroupFeedView/>}/>
+                            <Route path="/group/:id/cal" element={<GroupCalendarView/>}/>
+                            <Route path="/group/:id/members" element={<GroupMemberView/>}/>
+                            </>
                         )}
                     </Routes>
                 </div>

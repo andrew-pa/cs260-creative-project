@@ -10,7 +10,7 @@ function UserView({user, element}) {
 
     return (
         <>
-        <div className="col col-sm-5 col-md-4 col-xl-2 sidebar no-display-sm">
+        <div className="col col-sm-3 col-md-3 col-xl-2 sidebar no-display-sm">
             <div className="profile-md">
                 <img src={user.avatarSrc}/>
                 <Link className="text" to="/">{user.name}</Link>

@@ -3,14 +3,16 @@
 
 - Feed view
 - User feed
-- Group calendar
++ Group calendar
 - Group feed
-- User groups list for mobile
++ User groups list for mobile
++ Group member list view
 - New flows?
     - New event
     - Registration
     - New Group
 - Add more mock data for other groups
+    - find some more stock photos
 - Fix TODOs left in the code
 
 

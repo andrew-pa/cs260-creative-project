@@ -9,7 +9,23 @@
 
 .group-profile-md h1 {
   font-size: x-large;
+  margin-bottom: 0;
 }
+
+.profile-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.mem-profile {
+    margin: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+
 
 @media screen and (max-width: 575px) {
   .sidebar {
