@@ -6,7 +6,7 @@ import './styles/colors.css';
 
 import {
     BrowserRouter as Router,
-    Routes, Route, NavLink
+    Routes, Route, NavLink, useNavigate
 } from "react-router-dom";
 
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
@@ -18,12 +18,12 @@ import { UserFeedView, UserCalendarView } from './UserViews.js';
 import { GroupFeedView, GroupCalendarView, GroupMemberView } from './GroupViews.js';
 
 /* TODO:
-    * Make logout return to homepage if you're not there already
     * Write unipalette bootstrap theme thing
     * Sign up flow
 */
 
 function Header({showLogin, data}) {
+    let navigate = useNavigate();
     return (<>
         <Navbar sticky="top" bg="light" expand="sm" className="row main-shade2-bg">
             <Container>
@@ -47,7 +47,7 @@ function Header({showLogin, data}) {
                                     <img src={data.user.avatarSrc}/>
                                     <Nav.Link as={NavLink} to="/">{data.user.name}</Nav.Link>
                                 </div>
-                                <Nav.Link onClick={data.logout}>Sign Out</Nav.Link>
+                                <Nav.Link onClick={() => { data.logout(); navigate('/'); }}>Sign Out</Nav.Link>
                             </>
                             :
                             <>

@@ -103,12 +103,12 @@ export function useUserEvents() {
 const mockGroups = {
     group1: {
         name: '4096th YSA Ward',
-        iconSrc: '#', titleImgSrc: '#',
+        iconSrc: '#', titleImgSrc: '/images/friends1.jpg',
         desc: 'The 4096th YSA Ward group calendar. Subscribe to keep up with upcoming activities and events in the ward!'
     },
     group2: {
         name: 'Douglas Family',
-        iconSrc: '#', titleImgSrc: '#',
+        iconSrc: '#', titleImgSrc: '/images/family1.jpg',
         desc: ''
     },
     group3: {
@@ -118,7 +118,7 @@ const mockGroups = {
     },
     group4: {
         name: 'Kevin\'s Pizza',
-        iconSrc: '#', titleImgSrc: '#',
+        iconSrc: '#', titleImgSrc: '/images/pizza1.jpg',
         desc: 'Kevin\'s world-famous pizza! Come by and have a slice!'
     }
 };

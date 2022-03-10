@@ -12,7 +12,7 @@
     - Registration
     - New Group
 - Add more mock data for other groups
-    - find some more stock photos
+    + find some more stock photos
 - Fix TODOs left in the code
 
 
