@@ -28,7 +28,7 @@ function FeedEvent({event}) {
 export function Feed({events}) {
     return (
         <div className="col feed">
-            {events.map((event) => <FeedEvent event={event} key={event.id}/>)}
+            {events.length != 0 ? events.map((event) => <FeedEvent event={event} key={event.id}/>) : <p>No events!</p>}
         </div>
     );
 }

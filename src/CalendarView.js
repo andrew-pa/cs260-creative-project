@@ -115,6 +115,11 @@ export function CalendarView({events}) {
         }
     }
 
+    const selectedDayEvents = useMemo(() => events.filter(event => 
+        event.date.getYear() + 1900 == currentYear && 
+        event.date.getMonth() == currentMonth && 
+        event.date.getDate() == selectedDay), [events, currentYear, currentMonth, selectedDay]);
+
     return (
         <>
         <div className="container cal col" id="calendar">
@@ -135,7 +140,7 @@ export function CalendarView({events}) {
             {calRows}
         </div>
         <div className="col-xl-4 day-feed feed">
-            {<Feed events={events.filter(event => dateEq(event.date, currentDay))}/>}
+            {<Feed events={selectedDayEvents}/>}
         </div>
         </>
     );
