@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Button } from 'react-bootstrap';
 import './styles/calendar.css';
 import { useSecrets, useWeatherData, useHolidayData } from './ExternData.js';
+import { Feed } from './FeedView.js';
 
 function mapRange(start, end, fn) {
     let result = [];
@@ -134,7 +135,7 @@ export function CalendarView({events}) {
             {calRows}
         </div>
         <div className="col-xl-4 day-feed feed">
-            {"feed for selected day"}
+            {<Feed events={events.filter(event => dateEq(event.date, currentDay))}/>}
         </div>
         </>
     );
