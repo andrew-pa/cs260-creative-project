@@ -23,6 +23,7 @@ function UserView({user, element}) {
                         <Link to={"/group/" + group.id}>{group.name}</Link>
                     </li>
                 ))}
+                <li><Link to="/">Create new group...</Link></li>
             </ul>
         </div>
         <div className="container col row no-gutters">

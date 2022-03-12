@@ -14,6 +14,7 @@ import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { useAppData } from './Data.js';
 
 import { LoginModal } from './LoginModal.js';
+import { RegisterModal } from './RegisterModal.js';
 import { UserFeedView, UserCalendarView } from './UserViews.js';
 import { GroupFeedView, GroupCalendarView, GroupMemberView } from './GroupViews.js';
 
@@ -22,7 +23,7 @@ import { GroupFeedView, GroupCalendarView, GroupMemberView } from './GroupViews.
     * Sign up flow
 */
 
-function Header({showLogin, data}) {
+function Header({showLogin, showRegister, data}) {
     let navigate = useNavigate();
     return (<>
         <Navbar sticky="top" bg="light" expand="sm" className="row main-shade2-bg">
@@ -33,14 +34,14 @@ function Header({showLogin, data}) {
                     <Nav className="sm-auto">
                         {data.user ?
                             <>
-                                <Nav.Link>New Group</Nav.Link>
-                                <NavDropdown className="isplay-sm" title="My Groups">
+                                <NavDropdown title="My Groups">
                                     {data.user.groups.map(group => (
-                                        <NavDropdown.Item key={group.id}>
+                                        <NavDropdown.Item key={group.id} as={NavLink} to={`/group/${group.id}`}>
                                             <img style={{marginRight: '0.5rem'}} src={group.iconSrc}/>
-                                            <NavLink to={"/group/" + group.id}>{group.name}</NavLink>
+                                            <span>{group.name}</span>
                                         </NavDropdown.Item>
                                     ))}
+                                    <NavDropdown.Item>Create New Group...</NavDropdown.Item>
                                 </NavDropdown>
                                 <Nav.Link as={NavLink} to="/user-cal">My Calendar</Nav.Link>
                                 <div className="nav-profile profile-md display-sm">
@@ -51,7 +52,7 @@ function Header({showLogin, data}) {
                             </>
                             :
                             <>
-                                <Nav.Link>Sign Up</Nav.Link>
+                                <Nav.Link onClick={showRegister}>Sign Up</Nav.Link>
                                 <Nav.Link onClick={showLogin}>Log In</Nav.Link>
                             </>}
                     </Nav>
@@ -90,12 +91,14 @@ function App() {
     const data = useAppData();
 
     const [loginVisible, setLoginVisible] = useState(false);
+    const [registerVisible, setRegisterVisible] = useState(false);
 
     return (
         <Router>
             <div className="container">
                 <Header data={data}
-                        showLogin={() => setLoginVisible(true)}/>
+                        showLogin={() => setLoginVisible(true)}
+                        showRegister={() => setRegisterVisible(true)}/>
 
                 <div className="row mt-3">
                     <Routes>
@@ -112,6 +115,7 @@ function App() {
                 </div>
 
                 <LoginModal data={data} visible={loginVisible} handleClose={() => setLoginVisible(false)}/>
+                <RegisterModal data={data} visible={registerVisible} handleClose={() => setRegisterVisible(false)}/>
 
                 <Footer/>
             </div>

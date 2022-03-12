@@ -8,13 +8,13 @@ function updateStateFromTextInput(setState) {
 }
 
 export function LoginModal({data, visible, handleClose}) {
-    const [username, setUsername] = useState('');
+    const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
 
     function login() {
-        data.login(username, password)
+        data.login(emailAddress, password)
             .then(() => {
-                setUsername('');
+                setEmailAddress('');
                 setPassword('');
                 handleClose();
             })
@@ -32,10 +32,10 @@ export function LoginModal({data, visible, handleClose}) {
             <Modal.Body>
                 <Form>
                     <Form.Group as={Row} className="mb-3">
-                        <Form.Label column sm={2}>Username:</Form.Label>
+                        <Form.Label column sm={2}>Email address:</Form.Label>
                         <Col>
-                            <Form.Control type="text"
-                                value={username} onChange={updateStateFromTextInput(setUsername)}/>
+                            <Form.Control type="email"
+                                value={emailAddress} onChange={updateStateFromTextInput(setEmailAddress)}/>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-3">

@@ -9,7 +9,7 @@
 + Group member list view
 - New flows?
     - New event
-    - Registration
+    + Registration
     - New Group
 - Add more mock data for other groups
     + find some more stock photos

@@ -26,6 +26,35 @@ export function useData(initialData, createAPI, messageHandlers) {
     return {...data, ...apiFuncs, _dispatch: dispatch};
 }
 
+export function usePlainData(initial) {
+    const [data, dispatch] = useReducer(
+        (oldState, msg) => {
+            if(msg == 'clear') return initial;
+            return {
+                ...oldState,
+                [msg[0]]: msg[1]
+            };
+        },
+        initial
+    );
+
+    const objectProps = Object.keys(data);
+
+    const api = useMemo(() => {
+        let b = {};
+        for(let prop of objectProps) {
+            b[`set${prop[0].toUpperCase() + prop.substr(1)}`] = (val) => dispatch([prop, val]);
+            b[`set${prop[0].toUpperCase() + prop.substr(1)}FromInput`] = (e) => dispatch([prop, e.target.value]);
+        }
+        b.clear = () => dispatch('clear');
+        return b;
+    }, [objectProps, dispatch]);
+
+    return {...data, ...api};
+}
+
+
+
 function makeMockProfile(name) {
     return {
         id: 'user:'+name,
@@ -51,6 +80,9 @@ export function useAppData() {
             },
             async logout() {
                 dispatch(['logout']);
+            },
+            async register(form) {
+                dispatch(['login']);
             }
         }),
         {
@@ -68,12 +100,30 @@ const mockEvents = [
         desc: 'Come see some lovely geese with us at Everest Park'
     },
     {
+        id: 'e6', title: 'Weekly Goose Watch', date: new Date('2022-3-17 10:00:00'),
+        groupId: 'group3', author: makeMockProfile('Greg Goobanik'),
+        imgSrc: '/images/goose1.jpg',
+        desc: 'Come see some lovely geese with us at Everest Park'
+    },
+    {
+        id: 'e7', title: 'Weekly Goose Watch', date: new Date('2022-3-24 10:00:00'),
+        groupId: 'group3', author: makeMockProfile('Greg Goobanik'),
+        imgSrc: '/images/goose1.jpg',
+        desc: 'Come see some lovely geese with us at Everest Park'
+    },
+    {
+        id: 'e8', title: 'Weekly Goose Watch', date: new Date('2022-3-31 10:00:00'),
+        groupId: 'group3', author: makeMockProfile('Greg Goobanik'),
+        imgSrc: '/images/goose1.jpg',
+        desc: 'Come see some lovely geese with us at Everest Park'
+    },
+    {
         id: 'e2', title: 'Family Reunion', date: new Date('2022-3-13 13:00:00'),
         groupId: 'group2', author: makeMockProfile('Bob Douglas'),
         desc: 'Calling all Douglases! Meet up at Aunt Judy\'s house'
     },
     {
-        id: 'e3', title: 'Evening Meeting', date: new Date('2022-3-13 21:30:00'),
+        id: 'e3', title: 'Admin Meeting', date: new Date('2022-3-13 21:30:00'),
         groupId: 'group3', author: makeMockProfile('Greg Goobanik'),
         desc: 'Come discuss the important business of our club. Elections are coming up!'
     },
@@ -84,9 +134,20 @@ const mockEvents = [
         desc: "If you like to play games, you won't want to miss this month's game night!"
     },
     {
+        id: 'e9', title: 'Game Night', date: new Date('2022-4-20 20:00:00'),
+        groupId: 'group1', author: makeMockProfile('Quinn Stephens'),
+        imgSrc: '/images/game.jpg',
+        desc: "If you like to play games, you won't want to miss this month's game night!"
+    },
+    {
         id: 'e5', title: 'All You Can Eat Wednesday', date: new Date('2022-4-6 17:00:00'),
         groupId: 'group4', author: makeMockProfile('Kevin Roberts'),
         desc: 'Come scarf down as much pizza as you can get you hands on!'
+    },
+    {
+        id: 'e10', title: 'Richard\'s Birthday', date: new Date('2022-4-19 13:00:00'),
+        groupId: 'group2', author: makeMockProfile('Richard Douglas'),
+        desc: 'Happy birthday to me!'
     }
 ];
 
