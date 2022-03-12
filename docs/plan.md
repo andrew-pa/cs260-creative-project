@@ -1,10 +1,10 @@
 
 # Project #3 TODO:
 
-- Feed view
-- User feed
++ Feed view
++ User feed
 + Group calendar
-- Group feed
++ Group feed
 + User groups list for mobile
 + Group member list view
 - New flows?

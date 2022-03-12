@@ -13,7 +13,7 @@ function FeedEvent({event}) {
             </div>
 
         <div className="info">
-            {event.date.toString()}
+            {event.date.toLocaleString()}
             <span className="profile-sm text-gray">{event.author.name}
                 {event.author.avatarSrc && <img src={event.author.avatarSrc}/>}
             </span>

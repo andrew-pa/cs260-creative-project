@@ -8,7 +8,7 @@ import { useReducer, useMemo, useEffect } from 'react';
 // The first element in a message array is the name of a function in this object,
 // the rest of the elements of the array are passed as arguments to the member function
 // these functions only return the state that they have modified, and it is merged afterwards with the old state
-export function useData(initialData, createAPI, messageHandlers) {
+export function useData(initialData, createAPI, messageHandlers, createAPIClosure) {
     const [data, dispatch] = useReducer(
         function(oldState, msg) {
             const handler = messageHandlers[msg[0]];
@@ -21,7 +21,7 @@ export function useData(initialData, createAPI, messageHandlers) {
         initialData
     );
 
-    const apiFuncs = useMemo(() => createAPI(dispatch), [dispatch, createAPI]);
+    const apiFuncs = useMemo(() => createAPI(dispatch), [dispatch, createAPI, ...(createAPIClosure||[])]);
 
     return {...data, ...apiFuncs, _dispatch: dispatch};
 }
@@ -151,13 +151,25 @@ const mockEvents = [
     }
 ];
 
-export function useUserEvents() {
+export function useUserEvents(userProfile) {
     return useData(
         {
             events: mockEvents
         },
-        dispatch => ({}),
-        {}
+        dispatch => ({
+            add(groupId, title, date, desc) {
+                dispatch(['createEvent', groupId, title, date, desc]);
+            }
+        }),
+        {
+            createEvent(groupId, title, date, desc) {
+                return {
+                    events: [
+                        { id: `e:${title}`, title, date, groupId, desc, author: userProfile }
+                    ]
+                };
+            }
+        }
     );
 }
 
