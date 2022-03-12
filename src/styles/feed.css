@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 2em;
 }
 
 .event {
@@ -17,6 +16,10 @@
 
 .event .header {
     padding: 0 1em;
+}
+
+.event .header .emdash {
+    padding: 0 0.3em;
 }
 
 .event .header .group-name {

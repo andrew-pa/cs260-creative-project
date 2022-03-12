@@ -8,7 +8,7 @@ function FeedEvent({event}) {
         <div className="event accent-shade-border">
             <div className="header main-tint-fg accent-tint-bg">
                 <span>{event.title}</span>
-                    &mdash;
+                <span className="emdash">&mdash;</span>
                 <span className="group-name">{event.groupId}</span>
             </div>
 
@@ -19,7 +19,7 @@ function FeedEvent({event}) {
             </span>
         </div>
 
-        {event.imgSrc && <img src={event.imgSrc}/>}
+        {event.imgSrc && <img className="event-img" src={event.imgSrc}/>}
         <p className="desc">{event.desc}</p>
         </div>
     );
