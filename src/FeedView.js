@@ -1,15 +1,15 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useUserEvents } from './Data.js';
+import { useGroupData } from './Data.js';
 import './styles/feed.css'
 
 function FeedEvent({event}) {
+    const groupInfo = useGroupData(event.groupId);
+
     return (
         <div className="event accent-shade-border">
             <div className="header main-tint-fg accent-tint-bg">
                 <span>{event.title}</span>
                 <span className="emdash">&mdash;</span>
-                <span className="group-name">{event.groupId}</span>
+                <span className="group-name">{groupInfo.name}</span>
             </div>
 
         <div className="info">
