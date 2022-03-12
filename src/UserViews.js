@@ -7,7 +7,7 @@ import { Feed } from './FeedView.js';
 // Generic user-focused view with the user-oriented sidebar to the left and element component to the right
 // the `element` function will be called with the user event data object as a prop
 function UserView({user, element}) {
-    const data = useUserEvents();
+    const data = useUserEvents(user);
 
     return (
         <>
