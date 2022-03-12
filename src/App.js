@@ -106,9 +106,9 @@ function App() {
                                                                       : <UserFeedView user={data.user}/>}/>
                         {data.user && (<>
                             <Route path="/user-cal" element={<UserCalendarView user={data.user}/>}/>
-                            <Route path="/group/:id" element={<GroupFeedView/>}/>
-                            <Route path="/group/:id/cal" element={<GroupCalendarView/>}/>
-                            <Route path="/group/:id/members" element={<GroupMemberView/>}/>
+                            <Route path="/group/:id" element={<GroupFeedView user={data.user}/>}/>
+                            <Route path="/group/:id/cal" element={<GroupCalendarView user={data.user}/>}/>
+                            <Route path="/group/:id/members" element={<GroupMemberView user={data.user}/>}/>
                             </>
                         )}
                     </Routes>

@@ -15,7 +15,7 @@ export function useData(initialData, createAPI, messageHandlers, createAPIClosur
             if(!handler) throw msg;
             return {
                 ...oldState,
-                ...(handler.apply(null, msg.slice(1)))
+                ...(handler.apply(oldState, msg.slice(1)))
             };
         },
         initialData
@@ -92,7 +92,7 @@ export function useAppData() {
     );
 }
 
-const mockEvents = [
+let mockEvents = [
     {
         id: 'e1', title: 'Weekly Goose Watch', date: new Date('2022-3-10 10:00:00'),
         groupId: 'group3', author: makeMockProfile('Greg Goobanik'),
@@ -156,19 +156,9 @@ export function useUserEvents(userProfile) {
         {
             events: mockEvents
         },
-        dispatch => ({
-            add(groupId, title, date, desc) {
-                dispatch(['createEvent', groupId, title, date, desc]);
-            }
-        }),
+        dispatch => ({ }),
         {
-            createEvent(groupId, title, date, desc) {
-                return {
-                    events: [
-                        { id: `e:${title}`, title, date, groupId, desc, author: userProfile }
-                    ]
-                };
-            }
+            
         }
     );
 }
@@ -199,11 +189,22 @@ const mockGroups = {
 export function useGroupData(id) {
     const data = useData(
         { },
-        dispatch => ({}),
+        dispatch => ({
+            async addEvent(title, date, desc, user) {
+                dispatch(['createEvent', title, date, desc, user]);
+            }
+        }),
         {
             loadData(newData) {
-                console.log(newData);
                 return newData;
+            },
+            createEvent(title, date, desc, author) {
+                let newEvent = { id: `e:${title}`, title, date, groupId: id, desc, author };
+                if(!mockEvents.find(e => e.id == newEvent.id))
+                    mockEvents.push(newEvent);
+                return {
+                    events: [ newEvent, ...this.events ]
+                };
             }
         }
     );

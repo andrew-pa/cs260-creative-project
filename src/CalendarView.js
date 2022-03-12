@@ -139,7 +139,7 @@ export function CalendarView({events}) {
             </div>
             {calRows}
         </div>
-        <div className="col-xl-4 day-feed feed">
+        <div className="col-xl-4 day-feed feed" style={{marginTop: '1rem'}}>
             {<Feed events={selectedDayEvents}/>}
         </div>
         </>

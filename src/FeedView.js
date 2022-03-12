@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { Button } from 'react-bootstrap';
 import { useGroupData } from './Data.js';
 import './styles/feed.css'
 
@@ -25,10 +27,18 @@ function FeedEvent({event}) {
     );
 }
 
-export function Feed({events}) {
+export function Feed({events, showCreateEvent}) {
+    const sortedEvents = useMemo(() => events.sort((a,b) => a.date.getTime()-b.date.getTime()), [events]);
+
     return (
         <div className="col feed">
-            {events.length != 0 ? events.map((event) => <FeedEvent event={event} key={event.id}/>) : <p>No events!</p>}
+            {showCreateEvent &&
+                <div className="event accent-shade-border">
+                    <Button onClick={showCreateEvent} className="main-tint-fg accent-tint-bg" style={{padding: '0.1rem'}}>
+                        Create new event...
+                    </Button>
+                </div>}
+            {events.length != 0 ? sortedEvents.map((event) => <FeedEvent event={event} key={event.id}/>) : <i>No events</i>}
         </div>
     );
 }

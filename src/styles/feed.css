@@ -6,7 +6,6 @@
 
 .event {
     border: 1px solid black;
-    width: 100%;
     margin: 0 1em 1.5em 1em;
     display: flex;
     flex-direction: column;

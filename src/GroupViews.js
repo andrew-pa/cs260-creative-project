@@ -1,8 +1,9 @@
-import React from 'react';
+import {React, useState} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useGroupData, useGroupMemberData } from './Data.js';
 import { CalendarView } from './CalendarView.js';
 import { Feed } from './FeedView.js';
+import { NewEventModal } from './NewEventModal.js';
 import './styles/group.css';
 
 // Generic user-focused view with the user-oriented sidebar to the left and element component to the right
@@ -35,9 +36,19 @@ function GroupView({element, showFeedLink, showCalLink}) {
     );
 }
 
-export function GroupFeedView() {
+export function GroupFeedView({user}) {
     const id = useParams().id;
-    return (<GroupView element={(data) => data.events && <Feed events={data.events.filter(event => event.groupId == id )}/>} showFeedLink={false} showCalLink={true}/>);
+    const [ newEventModalVisible, setNewEventModalVisible ] = useState(false);
+
+    return (<>
+        <GroupView element={(data) => data.events && <>
+                 <Feed events={data.events.filter(event => event.groupId == id )} showCreateEvent={() => setNewEventModalVisible(true)}/>
+                <NewEventModal visible={newEventModalVisible} handleClose={()=>setNewEventModalVisible(false)}
+                    create={data.addEvent} author={user}/>
+            </>}
+            showFeedLink={false} showCalLink={true}/>
+        </>
+    );
 }
 
 export function GroupCalendarView() {
