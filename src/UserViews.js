@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useUserEvents } from './Data.js';
 import { CalendarView } from './CalendarView.js';
+import { Feed } from './FeedView.js';
 
 // Generic user-focused view with the user-oriented sidebar to the left and element component to the right
 // the `element` function will be called with the user event data object as a prop
@@ -34,7 +35,9 @@ function UserView({user, element}) {
 }
 
 export function UserFeedView({user}) {
-    return (<UserView user={user} element={() => "feed"}/>);
+    return (
+        <UserView user={user} element={(data) => <Feed events={data.events}/>}/>
+    );
 }
 
 export function UserCalendarView({user}) {
