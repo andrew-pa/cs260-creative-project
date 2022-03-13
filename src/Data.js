@@ -1,4 +1,5 @@
 import { useReducer, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 // `useData` is a general purpose data-store hook
@@ -80,6 +81,7 @@ export function useAppData() {
             },
             async logout() {
                 dispatch(['logout']);
+                window.location = '/';
             },
             async register(form) {
                 dispatch(['login']);
