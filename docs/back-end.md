@@ -30,3 +30,33 @@ Listed by which hook in `src/Data.js` that will probably call them.
 Misc
     - GET /images/:id
     - POST /images/:id
+
+# Data Schema
+
+Sessions:
+    - User ID
+    - Cookie ID
+
+User:
+    - Email address
+    - Password
+    - Ids of groups they are members of
+    - Id of profile picture
+
+Group:
+    - Group name
+    - Group description
+    - Group image id
+    - List of events
+    - List of members
+    - Group owner id
+
+Event:
+    - Title
+    - Creator user id
+    - Datetime
+    - Description
+    - Image id (optional)
+
+Image:
+    - Image data blob

@@ -1,4 +1,21 @@
 
+# Project #4 TODOs:
+
+- Create backend server
+    - Database schema
+    - Implement APIs
+- Connect APIs with UI middle
+    - Login/logout/sessions/cookies
+    - Registration
+    - Data
+- Finish UI
+    - Create group creation UI
+    - User profile page
+    - Delete group, events if owner of group
+    - Add members to group, join group
+        - Group invite links?
+    - Search for public groups?
+
 # Project #3 TODO:
 
 + Feed view
