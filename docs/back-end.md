@@ -3,13 +3,12 @@
 Listed by which hook in `src/Data.js` that will probably call them.
 
 `useAppData` - session info, group membership data
-    - POST /login
-    - POST /logout
-    - POST /register
-    - POST /user/groups
+    + POST /login
+    + POST /logout
+    + POST /register
 
 `useUserEvents` - events from user's groups
-    - GET /user/events
+    + GET /user/events
 
 `useGroupData` - group info
     - GET /group/:id
