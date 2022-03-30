@@ -30,6 +30,15 @@
     justify-content: left;
 }
 
+.search-results {
+    position: absolute;
+    top: 3.5em;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 0.5em;
+    margin-left: 0.5em;
+}
+
 .profile-md img {
     margin-right: 0.5em;
 }

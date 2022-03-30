@@ -9,12 +9,13 @@ import {
     Routes, Route, NavLink, useNavigate
 } from "react-router-dom";
 
-import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Container, Form, FormControl } from 'react-bootstrap';
 
 import { useAppData } from './Data.js';
 
 import { LoginModal } from './LoginModal.js';
 import { RegisterModal } from './RegisterModal.js';
+import { NewGroupModal } from './NewGroupModal.js';
 import { UserFeedView, UserCalendarView } from './UserViews.js';
 import { GroupFeedView, GroupCalendarView, GroupMemberView } from './GroupViews.js';
 
@@ -23,7 +24,23 @@ import { GroupFeedView, GroupCalendarView, GroupMemberView } from './GroupViews.
     * Sign up flow
 */
 
-function Header({showLogin, showRegister, data}) {
+function GroupSearchBox() {
+    const [query, setQuery] = useState('');
+    return (
+        <>
+        <Form className="d-flex">
+            <FormControl type="search" placeholder="Search for groups..." className="me-2" style={{alignSelf: 'center'}}
+            value={query} onChange={(e) => setQuery(e.target.value)}/>
+        </Form>
+
+        {query.length > 0 && <div className="search-results main-bg">
+            Here are some search results for {query}
+        </div>}
+        </>
+    );
+}
+
+function Header({showLogin, showRegister, showNewGroup, data}) {
     let navigate = useNavigate();
     return (<>
         <Navbar sticky="top" bg="light" expand="sm" className="row main-shade2-bg">
@@ -34,16 +51,17 @@ function Header({showLogin, showRegister, data}) {
                     <Nav className="sm-auto">
                         {data.user ?
                             <>
-                                <NavDropdown title="My Groups">
+                            <GroupSearchBox/>
+                            <NavDropdown title="Groups">
                                     {data.user.groups.map(group => (
                                         <NavDropdown.Item key={group.id} as={NavLink} to={`/group/${group.id}`}>
                                             <img style={{marginRight: '0.5rem'}} src={group.iconSrc}/>
                                             <span>{group.name}</span>
                                         </NavDropdown.Item>
                                     ))}
-                                    <NavDropdown.Item>Create New Group...</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={showNewGroup}>Create New Group...</NavDropdown.Item>
                                 </NavDropdown>
-                                <Nav.Link as={NavLink} to="/user-cal">My Calendar</Nav.Link>
+                                <Nav.Link as={NavLink} to="/user-cal">Calendar</Nav.Link>
                                 <div className="nav-profile profile-md display-sm">
                                     <img src={data.user.avatarSrc}/>
                                     <Nav.Link as={NavLink} to="/">{data.user.name}</Nav.Link>
@@ -80,7 +98,7 @@ function AboutPage() {
             </div>
             <div className="col">
                 <h3>Ever feel like you're having a hard time getting people together?</h3>
-                <h4> Try CommonAgenda!</h4>
+                <h4>Try CommonAgenda!</h4>
                 <p>We can help you put your ducks in a row, keeping your group's schedule organized and efficient.</p>
             </div>
         </div>
@@ -92,18 +110,19 @@ function App() {
 
     const [loginVisible, setLoginVisible] = useState(false);
     const [registerVisible, setRegisterVisible] = useState(false);
+    const [newGroupVisible, setNewGroupVisible] = useState(false);
 
     return (
         <Router>
             <div className="container">
                 <Header data={data}
                         showLogin={() => setLoginVisible(true)}
-                        showRegister={() => setRegisterVisible(true)}/>
+                        showRegister={() => setRegisterVisible(true)}
+                        showNewGroup={() => setNewGroupVisible(true)}/>
 
                 <div className="row mt-3">
                     <Routes>
-                        <Route exact path="/" element={!data.user ? <AboutPage/>
-                                                                      : <UserFeedView user={data.user}/>}/>
+                        <Route exact path="/" element={!data.user ? <AboutPage/> : <UserFeedView user={data.user}/>}/>
                         {data.user && (<>
                             <Route path="/user-cal" element={<UserCalendarView user={data.user}/>}/>
                             <Route path="/group/:id" element={<GroupFeedView user={data.user}/>}/>
@@ -116,6 +135,7 @@ function App() {
 
                 <LoginModal data={data} visible={loginVisible} handleClose={() => setLoginVisible(false)}/>
                 <RegisterModal data={data} visible={registerVisible} handleClose={() => setRegisterVisible(false)}/>
+                <NewGroupModal data={data} visible={newGroupVisible} handleClose={() => setNewGroupVisible(false)}/>
 
                 <Footer/>
             </div>
