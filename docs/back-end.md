@@ -30,6 +30,9 @@ Misc
     - GET /images/:id
     - POST /images/:id
 
+Searching for groups:
+    - GET /group?q=[query]
+
 # Data Schema
 
 Sessions:

@@ -9,12 +9,12 @@
     - Registration
     - Data
 - Finish UI
-    - Create group creation UI
+    + Create group creation UI
     - User profile page
     - Delete group, events if owner of group
     - Add members to group, join group
         - Group invite links?
-    - Search for public groups?
+    + Search for public groups?
 
 # Project #3 TODO:
 
