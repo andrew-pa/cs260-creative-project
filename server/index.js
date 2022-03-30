@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import userApis from './api/users.js';
+import groupApis from './api/groups.js';
 
 await mongoose.connect('mongodb://localhost:27017/commonagenda');
 
