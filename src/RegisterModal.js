@@ -7,7 +7,7 @@ export function RegisterModal({data, visible, handleClose}) {
         emailAddress: '',
         name: '',
         password: '',
-        profilePic: ''
+        profilePicture: ''
     });
 
     function register() {
@@ -23,7 +23,7 @@ export function RegisterModal({data, visible, handleClose}) {
         return formData.emailAddress.trim().length > 0
             && formData.name.trim().length > 0
             && formData.password.trim().length > 0
-            && formData.profilePic.length > 0;
+            && formData.profilePicture.length > 0;
     }, [formData]);
 
     return (
@@ -61,7 +61,7 @@ export function RegisterModal({data, visible, handleClose}) {
                         <Form.Label column sm={2}>Profile Picture:</Form.Label>
                         <Col>
                             <Form.Control type="file"
-                                value={formData.profilePic} onChange={formData.setProfilePicFromInput}/>
+                                value={formData.profilePicture} onChange={formData.setProfilePictureFromInput}/>
                         </Col>
                     </Form.Group>
                 </Form>

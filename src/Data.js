@@ -1,5 +1,6 @@
 import { useReducer, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 // `useData` is a general purpose data-store hook
@@ -22,7 +23,13 @@ export function useData(initialData, createAPI, messageHandlers, createAPIClosur
         initialData
     );
 
-    const apiFuncs = useMemo(() => createAPI(dispatch), [dispatch, createAPI, ...(createAPIClosure||[])]);
+    const apiFuncs = useMemo(() => {
+        let apis = createAPI(dispatch);
+        for(var api of Object.keys(apis)) {
+            apis[api] = apis[api].bind(data);
+        }
+        return apis;
+    }, [dispatch, createAPI, ...(createAPIClosure||[])]);
 
     return {...data, ...apiFuncs, _dispatch: dispatch};
 }
@@ -66,32 +73,44 @@ function makeMockProfile(name) {
 
 /// The main data-store hook for the user profile and other app global data. should only happen once in <App/>
 export function useAppData() {
-    function createMockUser() {
-        return {
-            ...makeMockProfile('John Douglas'),
-            groups: Object.keys(mockGroups).map(id => ({id, iconSrc: mockGroups[id].iconSrc, name: mockGroups[id].name}))
-        };
-    }
-
-    return useData(
+    const data = useData(
         { user: null },
         dispatch => ({
-            async login(username, password) {
-                dispatch(['login']);
+            async login(emailAddress, password) {
+                const session = await axios.post('/api/login', { emailAddress, password });
+                dispatch(['updateSession', session.data]);
             },
             async logout() {
-                dispatch(['logout']);
+                await axios.post('/api/logout');
+                dispatch(['updateSession', null]);
                 window.location = '/';
             },
             async register(form) {
-                dispatch(['login']);
+                const session = await axios.post('/api/register', form);
+                dispatch(['updateSession', session.data]);
+            },
+            async testSessionCookie() {
+                if(this.user == null) {
+                    const session = await axios.get('/api/user');
+                    if(session.data != 'invalid') {
+                        dispatch(['updateSession', session.data]);
+                    }
+                }
             }
         }),
         {
-            login: () => ({ user: createMockUser() }),
-            logout: () => ({ user: null }),
+            updateSession: user => {
+                console.log('updating session: ', user);
+                return ({ user });
+            },
         }
     );
+
+    useEffect(async () => {
+        await data.testSessionCookie();
+    }, [data]);
+
+    return data;
 }
 
 let mockEvents = [
@@ -154,15 +173,22 @@ let mockEvents = [
 ];
 
 export function useUserEvents(userProfile) {
-    return useData(
-        {
-            events: mockEvents
-        },
-        dispatch => ({ }),
-        {
-            
-        }
+    const data = useData(
+        { events: [], loaded: false },
+        dispatch => ({
+            async load() {
+                if(!this.loaded) {
+                    const events = await axios.get('/api/user/events');
+                    dispatch(['load', events.data]);
+                }
+            }
+        }),
+        { load: events => ({events, loaded: true}) }
     );
+
+    useEffect(async () => await data.load(), [data]);
+
+    return data;
 }
 
 const mockGroups = {
