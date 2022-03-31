@@ -6,13 +6,13 @@ Listed by which hook in `src/Data.js` that will probably call them.
     + POST /login
     + POST /logout
     + POST /register
+    - POST /group/new
 
 `useUserEvents` - events from user's groups
     + GET /user/events
 
 `useGroupData` - group info
     - GET /group/:id
-    - POST /group/new
     - DELETE /group/:id
     - GET /group/:id/events
 
