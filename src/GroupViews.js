@@ -1,4 +1,4 @@
-import {React, useState} from 'react';
+import {React, useState, useMemo} from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useGroupData, useGroupMemberData } from './Data.js';
 import { CalendarView } from './CalendarView.js';
@@ -8,9 +8,11 @@ import './styles/group.css';
 
 // Generic user-focused view with the user-oriented sidebar to the left and element component to the right
 // the `element` function will be called with the user event data object as a prop
-function GroupView({element, showFeedLink, showCalLink}) {
+function GroupView({element, showFeedLink, showCalLink, user}) {
     const id = useParams().id;
     const data = useGroupData(id);
+
+    const userIsOwner = useMemo(() => data.owner === user.id, [data, user]);
 
     return (
         <>
@@ -27,6 +29,7 @@ function GroupView({element, showFeedLink, showCalLink}) {
                 <li> <Link className="text" to={`/group/${id}/members`}>Group Members</Link> </li>
                 <li> <Link className="text" to="#">Invite to this group</Link> </li>
                 <li> <Link className="text" to="#">Leave group</Link> </li>
+                {userIsOwner && <li> <Link className="text" to="#">Delete this group</Link> </li>}
             </ul>
         </div>
         <div className="container col-sm row no-gutters">
@@ -46,13 +49,14 @@ export function GroupFeedView({user}) {
                 <NewEventModal visible={newEventModalVisible} handleClose={()=>setNewEventModalVisible(false)}
                     create={data.addEvent} author={user}/>
             </>}
+            user={user}
             showFeedLink={false} showCalLink={true}/>
         </>
     );
 }
 
-export function GroupCalendarView() {
-    return (<GroupView element={(data) => data.events && <CalendarView events={data.events}/>} showFeedLink={true} showCalLink={false}/>);
+export function GroupCalendarView({user}) {
+    return (<GroupView element={(data) => data.events && <CalendarView events={data.events}/>} showFeedLink={true} showCalLink={false} user={user}/>);
 }
 
 function MemberList({id}) {
