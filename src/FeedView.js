@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button }  from 'react-bootstrap';
-import { useGroupData } from './Data.js';
+import { Button, Modal }  from 'react-bootstrap';
+import { useGroupData, usePlainData } from './Data.js';
 import { EventForm } from './NewEventModal.js';
 import './styles/feed.css'
 
@@ -40,7 +40,7 @@ export function EventEditModal({visible, handleClose, event}) {
 
 function FeedEvent({event}) {
     const groupInfo = useGroupData(event.groupId);
-    const event = useEventData(event.id);
+    // const event = useEventData(event.id);
 
     const [editModalVis, setEditModalVis] = useState(false);
 
@@ -49,9 +49,9 @@ function FeedEvent({event}) {
     });
 
     const deleteEvent = useCallback(() => {
-        if(userIsOwner || user.id == event.creator) {
-            event.delete();
-        }
+        //if(userIsOwner || user.id == event.creator) {
+        //    event.delete();
+        //}
     });
 
     return (<>

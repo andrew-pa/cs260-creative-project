@@ -218,6 +218,11 @@ export function useGroupData(id) {
     const data = useData(
         { },
         dispatch => ({
+            async load(id) {
+                const data = await axios.get(`/api/group/${id}`);
+                dispatch(['loadData', data.data]);
+            },
+
             async addEvent(title, date, desc, user) {
                 dispatch(['createEvent', title, date, desc, user]);
             }
@@ -237,13 +242,9 @@ export function useGroupData(id) {
         }
     );
 
-    useEffect(() => {
-        data._dispatch(['loadData', {
-            id,
-            events: mockEvents.filter(e => e.groupId === id),
-            ...mockGroups[id]
-        }]);
-    }, [id, data._dispatch]);
+    useEffect(async () => {
+        await data.load(id);
+    }, [id, data]);
 
     return data;
 }
@@ -290,20 +291,20 @@ const mockGroupMembers = {
 export function useGroupMemberData(id) {
     const data = useData(
         { members: [] },
-        dispatch => ({}),
-        {
-            loadData(newData) {
-                console.log(newData);
-                return newData;
+        dispatch => ({
+            async load(id) {
+                const members = await axios.get(`/api/group/${id}/members`);
+                dispatch(['load', members.data]);
             }
+        }),
+        {
+            load(members) { return { members }; }
         }
     );
 
-    useEffect(() => {
-        data._dispatch(['loadData', {
-            members: mockGroupMembers[id]
-        }]);
-    }, [id, data._dispatch]);
+    useEffect(async () => {
+        await data.load(id);
+    }, [id, data]);
 
     return data;
 }
