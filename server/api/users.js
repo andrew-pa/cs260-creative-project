@@ -6,7 +6,7 @@ async function getUserGroups(userId) {
     const groups = await Group.find({ members: userId }).exec();
 
     return groups.map(group => ({
-        id: group._id,
+        _id: group._id,
         iconSrc: 'TODO: group icons',
         name: group.name
     }));
@@ -18,8 +18,8 @@ async function createSessionResponse(user, res) {
     res.send({
         id: user._id,
         name: user.name,
-        avatarSrc: user.profilePicture,
-        groups: await getUserGroups()
+        profilePicture: user.profilePicture,
+        groups: await getUserGroups(user._id)
     });
 }
 
@@ -77,7 +77,7 @@ export default function(app) {
                 id: user._id,
                 name: user.name,
                 avatarSrc: user.profilePicture,
-                groups: await getUserGroups()
+                groups: await getUserGroups(user._id)
             });
         } catch(err) {
             return handleInternalError(err, res);

@@ -1,7 +1,7 @@
 .feed {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
 }
 
 .event {
@@ -15,6 +15,9 @@
 
 .event .header {
     padding: 0 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }
 
 .event .header .emdash {

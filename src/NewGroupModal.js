@@ -1,14 +1,23 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
-import { usePlainData } from './Data.js';
+import { useNavigate } from 'react-router-dom';
+import { usePlainData, api } from './Data.js';
 
-export function NewGroupModal({visible, handleClose}) {
+// TODO: disable button until form is filled
+export function NewGroupModal({visible, handleClose, data, dispatch}) {
     const f = usePlainData({
-        title: '',
+        name: '',
         desc: '',
-        picture: ''
+        image: ''
     });
 
+    const navigate = useNavigate();
+
+    const createGroup = useCallback(() => {
+        dispatch(api.groups.create(f, id => navigate(`/group/${id}`)));
+        f.clear();
+        handleClose();
+    }, [data, navigate, f]);
 
     return (
         <Modal show={visible} onHide={handleClose}>
@@ -18,7 +27,7 @@ export function NewGroupModal({visible, handleClose}) {
             <Modal.Body>
                 <Form className="container">
                     <Form.Group as={Row} className="mb-3">
-                        <Form.Control type="text" placeholder="Name" value={f.title} onChange={f.setTitleFromInput}/>
+                        <Form.Control type="text" placeholder="Name" value={f.name} onChange={f.setNameFromInput}/>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-3">
                         <Form.Label column sm={2}>Picture:</Form.Label>
@@ -35,7 +44,7 @@ export function NewGroupModal({visible, handleClose}) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Cancel</Button>
-                <Button variant="primary" /*className="accent-tint-bg accent-tint2-border"*/>Create Group!</Button>
+                <Button variant="primary" onClick={createGroup} /*className="accent-tint-bg accent-tint2-border"*/>Create Group!</Button>
             </Modal.Footer>
         </Modal>
     );

@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
-import { usePlainData } from './Data.js';
+import { usePlainData, api } from './Data.js';
 
-export function RegisterModal({data, visible, handleClose}) {
+export function RegisterModal({data, dispatch, visible, handleClose}) {
     const formData = usePlainData({
         emailAddress: '',
         name: '',
@@ -11,12 +11,9 @@ export function RegisterModal({data, visible, handleClose}) {
     });
 
     function register() {
-        data.register(formData)
-            .then(() => {
-                formData.clear();
-                handleClose();
-            })
-            .catch(err => alert(err));
+        dispatch(api.user.register(formData));
+        formData.clear();
+        handleClose();
     }
 
     const formValid = useMemo(() => {

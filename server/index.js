@@ -15,11 +15,12 @@ app.use(cookieParser());
 let api = express();
 
 api.use((req, res, next) => {
-    console.log(`request for ${req.path}, body: ${JSON.stringify(req.body)}, cookies: ${JSON.stringify(req.cookies)}`);
+    console.log(`${req.method} ${req.path}, body: ${JSON.stringify(req.body)}, cookies: ${JSON.stringify(req.cookies)}`);
     next();
 });
 
 userApis(api);
+groupApis(api);
 
 app.use('/api', api);
 

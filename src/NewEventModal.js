@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useCallback } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
-import { usePlainData } from './Data.js';
+import { usePlainData, api } from './Data.js';
 
 export function EventForm({formData}) {
     return (
@@ -20,20 +20,17 @@ export function EventForm({formData}) {
     );
 }
 
-export function NewEventModal({create, visible, handleClose, author}) {
+export function NewEventModal({dispatch, visible, handleClose, groupId}) {
     const f = usePlainData({
         title: '',
-        date: '',
+        date: new Date(),
         desc: ''
     });
 
     function createEvent() {
-        create(f.title, new Date(f.date), f.desc, author).then(
-            () => {
-                f.clear();
-                handleClose()
-            }
-        );
+        dispatch(api.events.create(f), groupId);
+        f.clear();
+        handleClose()
     }
 
     return (
@@ -47,8 +44,39 @@ export function NewEventModal({create, visible, handleClose, author}) {
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Close</Button>
                 <Button variant="primary"
-                    disabled={f.title.trim().length == 0 || f.date.trim().length == 0 || f.desc.trim().length == 0}
+                    disabled={f.title.trim().length == 0 || f.desc.trim().length == 0}
                     onClick={createEvent}>Create</Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
+
+export function EditEventModal({visible, handleClose, event, dispatch}) {
+    const f = usePlainData({
+        title: event.title,
+        date: event.datetime,
+        desc: event.description
+    });
+
+    const finish = useCallback(() => {
+        dispatch(api.events.edit(f, event.groupId), event._id);
+        f.clear();
+        handleClose()
+    });
+
+    return (
+        <Modal show={visible} onHide={handleClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>Edit event</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <EventForm formData={f}/>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>Close</Button>
+                <Button variant="primary"
+        /* disabled={f.title?.trim().length == 0 || f.desc?.trim().length == 0} */
+                    onClick={finish}>Save</Button>
             </Modal.Footer>
         </Modal>
     );

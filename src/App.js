@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/general.css';
@@ -11,7 +11,7 @@ import {
 
 import { Navbar, Nav, NavDropdown, Container, Form, FormControl } from 'react-bootstrap';
 
-import { useAppData } from './Data.js';
+import { useAppData, usePlainData, api } from './Data.js';
 
 import { LoginModal } from './LoginModal.js';
 import { RegisterModal } from './RegisterModal.js';
@@ -40,7 +40,7 @@ function GroupSearchBox() {
     );
 }
 
-function Header({showLogin, showRegister, showNewGroup, data}) {
+function Header({data, dispatch, modalVisiblity}) {
     let navigate = useNavigate();
     return (<>
         <Navbar sticky="top" bg="light" expand="sm" className="row main-shade2-bg">
@@ -49,29 +49,31 @@ function Header({showLogin, showRegister, showNewGroup, data}) {
                 <Navbar.Toggle/>
                 <Navbar.Collapse>
                     <Nav className="sm-auto">
-                        {data.user ?
+                        {data.profile.loggedIn ?
                             <>
                             <GroupSearchBox/>
                             <NavDropdown title="Groups">
-                                    {data.user.groups.map(group => (
-                                        <NavDropdown.Item key={group.id} as={NavLink} to={`/group/${group.id}`}>
-                                            <img style={{marginRight: '0.5rem'}} src={group.iconSrc}/>
-                                            <span>{group.name}</span>
-                                        </NavDropdown.Item>
-                                    ))}
-                                    <NavDropdown.Item onClick={showNewGroup}>Create New Group...</NavDropdown.Item>
+                                    {data.groups
+                                        .filter(group => group.userIsMember)
+                                        .map(group => (
+                                            <NavDropdown.Item key={group._id} as={NavLink} to={`/group/${group._id}`}>
+                                                <img style={{marginRight: '0.5rem'}} src={group.iconSrc}/>
+                                                <span>{group.name}</span>
+                                            </NavDropdown.Item>
+                                        ))}
+                                    <NavDropdown.Item onClick={modalVisiblity.toggleNewGroup}>Create New Group...</NavDropdown.Item>
                                 </NavDropdown>
                                 <Nav.Link as={NavLink} to="/user-cal">Calendar</Nav.Link>
                                 <div className="nav-profile profile-md display-sm">
-                                    <img src={data.user.avatarSrc}/>
-                                    <Nav.Link as={NavLink} to="/">{data.user.name}</Nav.Link>
+                                    <img src={data.profile.profilePicture}/>
+                                    <Nav.Link as={NavLink} to="/">{data.profile.name}</Nav.Link>
                                 </div>
-                                <Nav.Link onClick={() => { data.logout(); navigate('/'); }}>Sign Out</Nav.Link>
+                                <Nav.Link onClick={() => { dispatch(api.user.logout()); navigate('/'); }}>Sign Out</Nav.Link>
                             </>
                             :
                             <>
-                                <Nav.Link onClick={showRegister}>Sign Up</Nav.Link>
-                                <Nav.Link onClick={showLogin}>Log In</Nav.Link>
+                                <Nav.Link onClick={modalVisiblity.toggleRegister}>Sign Up</Nav.Link>
+                                <Nav.Link onClick={modalVisiblity.toggleLogin}>Log In</Nav.Link>
                             </>}
                     </Nav>
                 </Navbar.Collapse>
@@ -106,36 +108,42 @@ function AboutPage() {
 }
 
 function App() {
-    const data = useAppData();
+    const [data, dispatch] = useAppData();
 
-    const [loginVisible, setLoginVisible] = useState(false);
-    const [registerVisible, setRegisterVisible] = useState(false);
-    const [newGroupVisible, setNewGroupVisible] = useState(false);
+    const modalVisiblity = usePlainData({
+        login: false, register: false, newGroup: false
+    });
+
+    const [sessionTested, setSessionTested] = useState(false);
+
+    useEffect(() => {
+        if(!data.loggedIn && !data.loginPending && !sessionTested) {
+            dispatch(api.user.testSession());
+            setSessionTested(true);
+        }
+    }, [data, sessionTested]);
 
     return (
         <Router>
             <div className="container">
-                <Header data={data}
-                        showLogin={() => setLoginVisible(true)}
-                        showRegister={() => setRegisterVisible(true)}
-                        showNewGroup={() => setNewGroupVisible(true)}/>
+                <Header data={data} dispatch={dispatch} modalVisiblity={modalVisiblity}/>
 
                 <div className="row mt-3">
                     <Routes>
-                        <Route exact path="/" element={!data.user ? <AboutPage/> : <UserFeedView user={data.user}/>}/>
-                        {data.user && (<>
-                            <Route path="/user-cal" element={<UserCalendarView user={data.user}/>}/>
-                            <Route path="/group/:id" element={<GroupFeedView user={data.user}/>}/>
-                            <Route path="/group/:id/cal" element={<GroupCalendarView user={data.user}/>}/>
-                            <Route path="/group/:id/members" element={<GroupMemberView user={data.user}/>}/>
+                        <Route exact path="/" element={!data.profile.loggedIn ? <AboutPage/> : <UserFeedView data={data} dispatch={dispatch} modalVisiblity={modalVisiblity}/>}/>
+                        {data.profile.loggedIn && (<>
+                            <Route path="/user-cal" element={<UserCalendarView data={data} dispatch={dispatch}/>}/>
+                            <Route path="/group/:id" element={<GroupFeedView data={data} dispatch={dispatch}/>}/>
+                            <Route path="/group/:id/cal" element={<GroupCalendarView data={data} dispatch={dispatch}/>}/>
+                            <Route path="/group/:id/members" element={<GroupMemberView data={data} dispatch={dispatch}/>}/>
                             </>
                         )}
                     </Routes>
                 </div>
 
-                <LoginModal data={data} visible={loginVisible} handleClose={() => setLoginVisible(false)}/>
-                <RegisterModal data={data} visible={registerVisible} handleClose={() => setRegisterVisible(false)}/>
-                <NewGroupModal data={data} visible={newGroupVisible} handleClose={() => setNewGroupVisible(false)}/>
+                <LoginModal data={data} dispatch={dispatch} visible={modalVisiblity.login} handleClose={modalVisiblity.toggleLogin}/>
+                <RegisterModal data={data} dispatch={dispatch} visible={modalVisiblity.register} handleClose={modalVisiblity.toggleRegister}/>
+                <NewGroupModal data={data} dispatch={dispatch} visible={modalVisiblity.newGroup} handleClose={modalVisiblity.toggleNewGroup}/>
 
                 <Footer/>
             </div>
