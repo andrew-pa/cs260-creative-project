@@ -29,14 +29,16 @@ function GroupView({element, showFeedLink, showCalLink, data, dispatch}) {
 
     const navigate = useNavigate();
 
-    const joinGroup = useCallback(() => {});
+    const joinGroup = useCallback(() => {
+        dispatch(api.groups.join(), groupId);
+    });
 
     const leaveGroup = useCallback(() => {
+        dispatch(api.groups.leave(() => navigate('/')), groupId);
     });
 
     const deleteGroup = useCallback(() => {
-        dispatch(api.groups.delete(groupId));
-        window.location = '/';
+        dispatch(api.groups.delete(groupId, () => navigate('/')));
     }, [groupId, navigate]);
 
     if(group.notFound) {
@@ -58,7 +60,7 @@ function GroupView({element, showFeedLink, showCalLink, data, dispatch}) {
                 {showCalLink && <li> <Link className="text" to={`/group/${groupId}/cal`}>Group Calendar</Link> </li>}
                 <li> <Link className="text" to={`/group/${groupId}/members`}>Group Members</Link> </li>
                 {!userIsMember && <li> <Link className="text" to="#" onClick={joinGroup}>Join this group</Link> </li>}
-                {!userIsOwner && <li> <Link className="text" to="#" onClick={leaveGroup}>Leave group</Link> </li>}
+                {userIsMember && <li> <Link className="text" to="#" onClick={leaveGroup}>Leave group</Link> </li>}
                 {userIsOwner && <li> <Link className="text" to="#" onClick={deleteGroup}>Delete this group</Link> </li>}
             </ul>
         </div>

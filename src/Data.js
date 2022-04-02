@@ -127,10 +127,6 @@ export function useAppData() {
                     },
                     members: {
                         element: {},
-                        $group_join(oldState, msg) {
-                            if(msg.pending) return oldState;
-                            return [...oldState, msg.result.member];
-                        }
                     },
                     $group_load(oldState, msg) {
                         if(msg.pending) return {...oldState, loading: true};
@@ -141,21 +137,44 @@ export function useAppData() {
                             ...oldState,
                             loaded: true,
                             loading: false,
+                            name: res.name,
                             image: res.image,
                             desc: res.description,
                             owner: res.owner,
                             members: res.members,
                             events: res.events.map(ev => ({...ev, datetime: new Date(ev.datetime)}))
                         };
+                    },
+                    $group_join(oldState, msg) {
+                        if(msg.pending) return oldState;
+                        return {
+                            ...oldState,
+                            userIsMember: true,
+                            members: [...oldState.members, msg.result.member]
+                        };
+                    },
+                    $group_leave(oldState, msg) {
+                        if(msg.pending) return oldState;
+                        console.log('GL', msg.id);
+                        return {
+                            ...oldState,
+                            userIsMember: false,
+                            members: oldState.members.filter(mem => mem._id != msg.result)
+                        };
                     }
                 },
                 $group_new(oldState, msg) {
                     if(msg.pending) return oldState;
-                    return [{_id: msg.result.id, name: '', iconSrc: '', loaded: false}, ...oldState];
+                    const existingGroup = oldState.find(g => g._id == msg.result.id);
+                    if(existingGroup) {
+                        return oldState.map(g => g._id == msg.result.id ? {loaded:false, name:'', _id: msg.result.id} : g);
+                    } else {
+                        return [{_id: msg.result.id, name: '', iconSrc: '', loaded: false}, ...oldState];
+                    }
                 },
                 $group_delete(oldState, msg) {
                     if(msg.pending || msg.error) return oldState;
-                    return oldState.filter(g => g._id != msg.result.groupId);
+                    return oldState.map(g => g._id == msg.result.groupId ? {loaded: true, notFound: true, _id: g._id} : g);
                 }
             },
             $user_login(oldState, msg) {
@@ -205,13 +224,13 @@ export const api = {
             groupIdCallback(id);
             return { id };
         }),
-        delete: makeAsyncApi('group_delete', async (groupId) => {
+        delete: makeAsyncApi('group_delete', async (groupId, cb) => {
             await axios.delete(`/api/group/${groupId}`);
+            cb();
             return { groupId };
         }),
-        join: makeAsyncApi('group_join', async (groupId) => {
-            await axios.put(`/group/${groupId}/members`);
-            this.dispatch({t: ''});
+        join: makeAsyncApi('group_join', async function(groupId) {
+            await axios.put(`/api/group/${groupId}/members`);
             return {
                 member: {
                     _id: this.data.profile._id,
@@ -219,6 +238,11 @@ export const api = {
                     profilePicture: this.data.profilePicture
                 }
             };
+        }),
+        leave: makeAsyncApi('group_leave', async function(cb, groupId) {
+            await axios.delete(`/api/group/${groupId}/members`);
+            cb();
+            return this.data.profile._id;
         })
     },
     events: {

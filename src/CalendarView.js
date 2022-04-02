@@ -80,7 +80,7 @@ export function CalendarView({events}) {
                         dayForecast={currentForecast?.filter(df => start_of_day <= df.dt && df.dt <= end_of_day)[0]}
                     >
                         {events
-                            .filter(ev => dateEq(ev.date, currentDay))
+                            .filter(ev => dateEq(ev.datetime, currentDay))
                             .map(ev => <EventTag key={ev.id} data={ev}/>)}
                         {holidays?.data
                                 ?.filter(h => h.data.datetime.day == currentDate)
@@ -116,9 +116,9 @@ export function CalendarView({events}) {
     }
 
     const selectedDayEvents = useMemo(() => events.filter(event => 
-        event.date.getYear() + 1900 == currentYear && 
-        event.date.getMonth() == currentMonth && 
-        event.date.getDate() == selectedDay), [events, currentYear, currentMonth, selectedDay]);
+        event.datetime.getYear() + 1900 == currentYear && 
+        event.datetime.getMonth() == currentMonth && 
+        event.datetime.getDate() == selectedDay), [events, currentYear, currentMonth, selectedDay]);
 
     return (
         <>

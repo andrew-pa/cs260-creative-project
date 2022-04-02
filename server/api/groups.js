@@ -9,9 +9,8 @@ export default function(app) {
                 return res.sendStatus(400);
             }
             let group = (await Group.findById(req.params.id)
-                .populate({ path: 'members', select: ['name', 'profilePicture'] })
-                .populate('events')
-                .populate({ path: 'events.creator', select: [ 'creator.name', 'creator.profilePicture' ] })
+                .populate({ path: 'members', select: ['_id', 'name', 'profilePicture'] })
+                .populate({ path: 'events', populate: { path: 'creator', select: ['name','profilePicture','_id']}})
                 .exec());
 
             if(group == null) {
@@ -71,6 +70,10 @@ export default function(app) {
         try {
             const user = await validateSession(req);
             const group = await Group.findById(req.params.id).exec();
+            if(!group.members.id(user._id)) {
+                return res.send(401);
+            }
+
             const event = await Event.create({
                 title: req.body.title,
                 creator: user._id,
@@ -124,9 +127,10 @@ export default function(app) {
 
     app.get('/group/:id/members', async (req, res) => {
         try {
-            const group = Group.findById(req.params.group_id);
-            
-            res.send(group.members);
+            const group = await Group.findById(req.params.group_id)
+                .populate({ path: 'members', select: ['_id', 'name', 'profilePicture'] })
+                .exec();
+            res.send(group.members.toObject());
         } catch (err) {
             return handleInternalError(err, res);
         }
@@ -137,6 +141,7 @@ export default function(app) {
             const user = await validateSession(req);
             const group = await Group.findById(req.params.id).exec();
             group.members.push(user._id)
+            await group.save();
             res.sendStatus(200);
         } catch (err) {
             return handleInternalError(err, res);
@@ -145,8 +150,11 @@ export default function(app) {
 
     app.delete('/group/:id/members', async (req, res) => {
         try {
-            const group = Group.findById(req.params.id);
-            group.members.pull(await validateSession(req)._id);
+            const user = await validateSession(req);
+            const group = await Group.findById(req.params.id).exec();
+            console.log(group.members, Object.keys(group.members));
+            group.members.remove(user._id);
+            await group.save();
             res.sendStatus(200);
         } catch (err) {
             return handleInternalError(err, res);
