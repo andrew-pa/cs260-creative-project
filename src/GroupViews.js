@@ -50,7 +50,7 @@ function GroupView({element, showFeedLink, showCalLink, data, dispatch}) {
         <>
         <div className="col col-sm-3 col-md-3 col-xl-2 sidebar">
             <div className="group-profile-md">
-                <img src={group.image}/>
+                <img src={`/upload/${group.image}`}/>
                 <h1>{group.name}</h1>
                 <p className="desc no-display-sm">{group.desc}</p>
             </div>
@@ -99,7 +99,7 @@ function MemberList({group}) {
         <div className="profile-list">
             {group.members?.map(member => (
                 <div className="mem-profile profile-md" key={member._id}>
-                    <img src={member.profilePicture}/>
+                    <img src={`/upload/${member.profilePicture}`}/>
                     <p>{member.name}</p>
                 </div>
             ))}

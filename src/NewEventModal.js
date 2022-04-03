@@ -12,9 +12,14 @@ export function EventForm({formData}) {
                 <Form.Label column sm={2}>Date:</Form.Label>
                 <Col><Form.Control type="datetime-local" value={formData.date} onChange={formData.setDateFromInput}/></Col>
             </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+            <Form.Label column sm={2}>Picture:</Form.Label>
+                <Col>
+                    <Form.Control type="file" onChange={(e) => formData.setImage(e.target.files[0])}/>
+                </Col>
+            </Form.Group>
             <Form.Group as={Row}>
-                <Form.Control as="textarea" value={formData.desc} onChange={formData.setDescFromInput}
-                    placeholder="Event Description"/>
+                <Form.Control as="textarea" value={formData.desc} onChange={formData.setDescFromInput} placeholder="Event Description"/>
             </Form.Group>
         </Form>
     );
@@ -24,10 +29,14 @@ export function NewEventModal({dispatch, visible, handleClose, groupId}) {
     const f = usePlainData({
         title: '',
         date: new Date(),
-        desc: ''
+        desc: '',
+        image: null
     });
 
     function createEvent() {
+        const img = new FormData();
+        img.append('img', f.image, f.image.name);
+        f.image = img;
         dispatch(api.events.create(f), groupId);
         f.clear();
         handleClose()
@@ -55,10 +64,14 @@ export function EditEventModal({visible, handleClose, event, dispatch}) {
     const f = usePlainData({
         title: event.title,
         date: event.datetime,
-        desc: event.description
+        desc: event.description,
+        image: null
     });
 
     const finish = useCallback(() => {
+        const img = new FormData();
+        img.append('img', f.image, f.image.name);
+        f.image = img;
         dispatch(api.events.edit(f, event.groupId), event._id);
         f.clear();
         handleClose()

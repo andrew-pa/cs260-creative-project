@@ -27,7 +27,7 @@ function FeedEvent({event, data, dispatch}) {
                 <div>
                     <span>{event.title}</span>
                     <span className="emdash">&mdash;</span>
-                    <span className="group-name">{event.groupName}</span>
+                    <Link className="group-name" to={`/group/${event.groupId}`}>{event.groupName}</Link>
                 </div>
                 <div>
                     <Button style={{margin: '0.2rem'}} size="sm" variant="outline-dark" onClick={editEvent}>✎</Button>
@@ -38,11 +38,11 @@ function FeedEvent({event, data, dispatch}) {
         <div className="info">
             {event.datetime.toLocaleString()}
             <span className="profile-sm text-gray">{event.creator.name}
-                {event.creator.profilePicture && <img src={event.creator.profilePicture}/>}
+                {event.creator.profilePicture && <img src={`/upload/${event.creator.profilePicture}`}/>}
             </span>
         </div>
 
-        {event.imgSrc && <img className="event-img" src={event.image}/>}
+        {event.image && <img className="event-img" src={`/upload/${event.image}`}/>}
         <p className="desc">{event.description}</p>
         </div>
     </>);

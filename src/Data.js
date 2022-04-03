@@ -103,7 +103,8 @@ function singleGroupReducers() {
                         ...oldState,
                         title: msg.result.title,
                         datetime: msg.result.date,
-                        description: msg.result.desc
+                        description: msg.result.desc,
+                        image: msg.result.image
                     };
                 }
             },
@@ -223,7 +224,7 @@ export const api = {
             }
         }),
         register: makeAsyncApi('user_login', async (userInfo) => {
-            const picId = (await axios.post('/api/upload/img', {})).data;
+            const picId = (await axios.post('/api/upload/img', userInfo.profilePicture)).data;
             userInfo.profilePicture = picId;
             return (await axios.post('/api/register', userInfo)).data;
         })
@@ -233,6 +234,8 @@ export const api = {
             return (await axios.get(`/api/group/${id}`)).data;
         }),
         create: makeAsyncApi('group_new', async (groupInfo, groupIdCallback) => {
+            const picId = (await axios.post('/api/upload/img', groupInfo.image)).data;
+            groupInfo.image = picId;
             const id = (await axios.post('/api/group/new', groupInfo)).data;
             // console.log(`new group id = ${id}`);
             if(!id) throw 'failed to create group';
@@ -267,9 +270,17 @@ export const api = {
     },
     events: {
         create: makeAsyncApi('event_new', async (eventInfo, groupId) => {
+            if(eventInfo.image) {
+                const picId = (await axios.post('/api/upload/img', eventInfo.image)).data;
+                eventInfo.image = picId;
+            }
             return (await axios.post(`/api/group/${groupId}/events/new`, eventInfo)).data;
         }),
         edit: makeAsyncApi('event_edit', async (eventInfo, groupId, eventId) => {
+            if(eventInfo.image) {
+                const picId = (await axios.post('/api/upload/img', eventInfo.image)).data;
+                eventInfo.image = picId;
+            }
             await axios.put(`/api/group/${groupId}/events/${eventId}`, eventInfo);
             return eventInfo;
         }),

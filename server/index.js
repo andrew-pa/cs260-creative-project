@@ -35,10 +35,11 @@ const upload = multer({
 });
 
 api.post('/upload/img', upload.single('img'), async (req, res) => {
-    res.send(req.file);
+    res.send(req.file.filename);
 });
 
 app.use('/api', api);
 
-app.listen(4000);
-console.log('listening on port 4000');
+app.use('/upload', express.static('upload'));
+
+app.listen(4000, () => console.log('listening on port 4000'));

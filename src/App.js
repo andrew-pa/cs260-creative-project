@@ -21,7 +21,6 @@ import { GroupFeedView, GroupCalendarView, GroupMemberView } from './GroupViews.
 
 /* TODO:
     * Write unipalette bootstrap theme thing
-    * Image upload
 */
 
 function GroupSearchBox({data, dispatch}) {
@@ -73,7 +72,7 @@ function Header({data, dispatch, modalVisiblity}) {
                                         .filter(group => group.userIsMember)
                                         .map(group => (
                                             <NavDropdown.Item key={group._id} as={NavLink} to={`/group/${group._id}`}>
-                                                <img style={{marginRight: '0.5rem'}} src={group.iconSrc}/>
+                                                {/*<img style={{marginRight: '0.5rem'}} src={group.iconSrc}/>*/}
                                                 <span>{group.name}</span>
                                             </NavDropdown.Item>
                                         ))}
@@ -81,7 +80,7 @@ function Header({data, dispatch, modalVisiblity}) {
                                 </NavDropdown>
                                 <Nav.Link as={NavLink} to="/user-cal">Calendar</Nav.Link>
                                 <div className="nav-profile profile-md display-sm">
-                                    <img src={data.profile.profilePicture}/>
+                                    <img src={`/upload/${data.profile.profilePicture}`}/>
                                     <Nav.Link as={NavLink} to="/">{data.profile.name}</Nav.Link>
                                 </div>
                                 <Nav.Link onClick={() => { dispatch(api.user.logout()); navigate('/'); }}>Sign Out</Nav.Link>
@@ -148,10 +147,10 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={!data.profile.loggedIn ? <AboutPage/> : <UserFeedView data={data} dispatch={dispatch} modalVisiblity={modalVisiblity}/>}/>
                         {data.profile.loggedIn && (<>
-                            <Route path="/user-cal" element={<UserCalendarView data={data} dispatch={dispatch}/>}/>
-                            <Route path="/group/:id" element={<GroupFeedView data={data} dispatch={dispatch}/>}/>
-                            <Route path="/group/:id/cal" element={<GroupCalendarView data={data} dispatch={dispatch}/>}/>
-                            <Route path="/group/:id/members" element={<GroupMemberView data={data} dispatch={dispatch}/>}/>
+                            <Route path="/user-cal" element={<UserCalendarView data={data} dispatch={dispatch} modalVisiblity={modalVisiblity}/>}/>
+                            <Route path="/group/:id" element={<GroupFeedView data={data} dispatch={dispatch} modalVisiblity={modalVisiblity}/>}/>
+                            <Route path="/group/:id/cal" element={<GroupCalendarView data={data} dispatch={dispatch} modalVisiblity={modalVisiblity}/>}/>
+                            <Route path="/group/:id/members" element={<GroupMemberView data={data} dispatch={dispatch} modalVisiblity={modalVisiblity}/>}/>
                             </>
                         )}
                     </Routes>

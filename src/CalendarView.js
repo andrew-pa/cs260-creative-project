@@ -81,7 +81,7 @@ export function CalendarView({events}) {
                     >
                         {events
                             .filter(ev => dateEq(ev.datetime, currentDay))
-                            .map(ev => <EventTag key={ev.id} data={ev}/>)}
+                            .map(ev => <EventTag key={ev._id} data={ev}/>)}
                         {holidays?.data
                                 ?.filter(h => h.data.datetime.day == currentDate)
                                 .map((h,i) => <EventTag key={`holiday${i}`} data={{title: h.name}}/>)}

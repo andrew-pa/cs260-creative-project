@@ -7,10 +7,13 @@ export function RegisterModal({data, dispatch, visible, handleClose}) {
         emailAddress: '',
         name: '',
         password: '',
-        profilePicture: ''
+        profilePicture: null
     });
 
     function register() {
+        const img = new FormData();
+        img.append('img', formData.profilePicture, formData.profilePicture.name);
+        formData.profilePicture = img;
         dispatch(api.user.register(formData));
         formData.clear();
         handleClose();
@@ -20,7 +23,7 @@ export function RegisterModal({data, dispatch, visible, handleClose}) {
         return formData.emailAddress.trim().length > 0
             && formData.name.trim().length > 0
             && formData.password.trim().length > 0
-            && formData.profilePicture.length > 0;
+            && formData.profilePicture != null
     }, [formData]);
 
     return (
@@ -57,8 +60,7 @@ export function RegisterModal({data, dispatch, visible, handleClose}) {
                     <Form.Group as={Row} className="mb-3">
                         <Form.Label column sm={2}>Profile Picture:</Form.Label>
                         <Col>
-                            <Form.Control type="file"
-                                value={formData.profilePicture} onChange={(e) => formData.setProfilePicture(e.target.files[0])}/>
+                            <Form.Control type="file" onChange={(e) => formData.setProfilePicture(e.target.files[0])}/>
                         </Col>
                     </Form.Group>
                 </Form>

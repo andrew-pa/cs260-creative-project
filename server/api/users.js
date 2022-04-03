@@ -7,7 +7,6 @@ async function getUserGroups(userId) {
 
     return groups.map(group => ({
         _id: group._id,
-        iconSrc: 'TODO: group icons',
         name: group.name
     }));
 }
@@ -76,7 +75,7 @@ export default function(app) {
             res.send({
                 id: user._id,
                 name: user.name,
-                avatarSrc: user.profilePicture,
+                profilePicture: user.profilePicture,
                 groups: await getUserGroups(user._id)
             });
         } catch(err) {

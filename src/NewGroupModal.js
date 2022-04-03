@@ -8,12 +8,15 @@ export function NewGroupModal({visible, handleClose, data, dispatch}) {
     const f = usePlainData({
         name: '',
         desc: '',
-        image: ''
+        image: null
     });
 
     const navigate = useNavigate();
 
     const createGroup = useCallback(() => {
+        const img = new FormData();
+        img.append('img', f.image, f.image.name);
+        f.image = img;
         dispatch(api.groups.create(f, id => navigate(`/group/${id}`)));
         f.clear();
         handleClose();
@@ -33,7 +36,7 @@ export function NewGroupModal({visible, handleClose, data, dispatch}) {
                         <Form.Label column sm={2}>Picture:</Form.Label>
                         <Col>
                             <Form.Control type="file"
-                                value={f.picture} onChange={f.setPictureFromInput}/>
+                                onChange={(e) => f.setImage(e.target.files[0])}/>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row}>

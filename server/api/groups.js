@@ -90,9 +90,9 @@ export default function(app) {
         try {
             const user = await validateSession(req);
             const group = await Group.findById(req.params.id).exec();
-            if(!group.members.id(user._id)) {
+            /*if(!group.members.id(user._id)) {
                 return res.send(401);
-            }
+            }*/
 
             const event = await Event.create({
                 title: req.body.title,

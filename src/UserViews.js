@@ -29,7 +29,7 @@ function UserView({data, dispatch, element, modalVisiblity}) {
         <>
         <div className="col col-sm-3 col-md-3 col-xl-2 sidebar no-display-sm">
             <div className="profile-md">
-                <img src={data.profile.profilePicture}/>
+                <img src={`/upload/${data.profile.profilePicture}`}/>
                 <Link className="text" to="/">{data.profile.name}</Link>
             </div>
             <hr className="main-shade-bordar"/>
@@ -38,7 +38,7 @@ function UserView({data, dispatch, element, modalVisiblity}) {
                     .filter(group => group.userIsMember)
                     .map(group => (
                     <li key={group._id}>
-                        <img src={group.iconSrc}/>
+                        {/*<img src={group.iconSrc}/>*/}
                         <Link to={"/group/" + group._id}>{group.name}</Link>
                     </li>
                 ))}

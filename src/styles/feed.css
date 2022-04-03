@@ -26,6 +26,8 @@
 
 .event .header .group-name {
     font-style: italic;
+    color: white;
+    text-decoration: none;
 }
 
 .event .info {
