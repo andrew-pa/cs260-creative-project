@@ -22,7 +22,7 @@ export const Event = mongoose.model('Event', eventSchema);
 
 const groupSchema = new Schema({
     name: String,
-    description: String,
+    description: { type: String, text: true },
     image: String,
     events: [eventSchema],
     members: [{type: Schema.Types.ObjectId, ref: 'User'}],

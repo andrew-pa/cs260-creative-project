@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/general.css';
@@ -6,7 +6,7 @@ import './styles/colors.css';
 
 import {
     BrowserRouter as Router,
-    Routes, Route, NavLink, useNavigate
+    Routes, Route, NavLink, useNavigate, Link
 } from "react-router-dom";
 
 import { Navbar, Nav, NavDropdown, Container, Form, FormControl } from 'react-bootstrap';
@@ -21,20 +21,36 @@ import { GroupFeedView, GroupCalendarView, GroupMemberView } from './GroupViews.
 
 /* TODO:
     * Write unipalette bootstrap theme thing
-    * Sign up flow
+    * Image upload
 */
 
-function GroupSearchBox() {
+function GroupSearchBox({data, dispatch}) {
     const [query, setQuery] = useState('');
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        dispatch(api.groups.search(query));
+    }, [query]);
+
+    const onKeyDown = useCallback((e) => {
+        if(e.key == 'Enter' && data.searchResults.length > 0) {
+            e.preventDefault();
+            setQuery('');
+            navigate(`/group/${data.searchResults[0]._id}`);
+        }
+    }, [data, navigate]);
+
+
     return (
         <>
         <Form className="d-flex">
             <FormControl type="search" placeholder="Search for groups..." className="me-2" style={{alignSelf: 'center'}}
-            value={query} onChange={(e) => setQuery(e.target.value)}/>
+            value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={onKeyDown}/>
         </Form>
 
-        {query.length > 0 && <div className="search-results main-bg">
-            Here are some search results for {query}
+        {data.searchResults.length > 0 && <div className="search-results main-bg">
+            {data.searchResults.map(({_id, name}) => <Link key={_id} to={`/group/${_id}`} onClick={() => setQuery('')}>{name}</Link>)}
         </div>}
         </>
     );
@@ -51,7 +67,7 @@ function Header({data, dispatch, modalVisiblity}) {
                     <Nav className="sm-auto">
                         {data.profile.loggedIn ?
                             <>
-                            <GroupSearchBox/>
+                            <GroupSearchBox data={data} dispatch={dispatch}/>
                             <NavDropdown title="Groups">
                                     {data.groups
                                         .filter(group => group.userIsMember)

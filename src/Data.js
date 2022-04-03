@@ -31,7 +31,8 @@ export function usePlainData(initial) {
 }
 
 function applyReducerTree(reducerTree, oldState, msg, parentId) {
-    //console.log('ART', reducerTree, oldState, msg);
+    // console.log('ART', reducerTree, oldState, msg);
+    if(reducerTree == undefined) return oldState;
     var newState, idToMatch;
     if(Array.isArray(oldState)) {
         newState = oldState.map(
@@ -92,77 +93,82 @@ function makeAsyncApi(messageType, fn) {
     return (...args) => ({ t: messageType, _fn: (data,id,dispatch) => fn.apply({data,dispatch}, [...args, id]) }); //TODO: this is cursed, we should really pass the data first
 }
 
+function singleGroupReducers() {
+    return {
+        events: {
+            element: {
+                $event_edit(oldState, msg) {
+                    if(msg.pending) return oldState;
+                    return {
+                        ...oldState,
+                        title: msg.result.title,
+                        datetime: msg.result.date,
+                        description: msg.result.desc
+                    };
+                }
+            },
+            $event_new(oldState, msg) {
+                if(msg.pending) return oldState;
+                msg.result.datetime = new Date(msg.result.datetime);
+                return [...oldState, msg.result];
+            },
+            $event_delete(oldState, msg) {
+                if(msg.pending) return oldState;
+                return oldState.filter(ev => ev._id != msg.result);
+            }
+        },
+        members: {
+            element: {},
+        },
+        $group_load(oldState, msg) {
+            if(msg.pending) return {...oldState, loading: true};
+            if(msg.error)
+                return {...oldState, loading: false, loaded: true, notFound: msg.error.response.status == 404};
+            const res = msg.result;
+            return {
+                ...oldState,
+                loaded: true,
+                loading: false,
+                name: res.name,
+                image: res.image,
+                desc: res.description,
+                owner: res.owner,
+                members: res.members,
+                events: res.events.map(ev => ({...ev, datetime: new Date(ev.datetime)}))
+            };
+        },
+        $group_join(oldState, msg) {
+            if(msg.pending) return oldState;
+            return {
+                ...oldState,
+                userIsMember: true,
+                members: [...oldState.members, msg.result.member]
+            };
+        },
+        $group_leave(oldState, msg) {
+            if(msg.pending) return oldState;
+            console.log('GL', msg.id);
+            return {
+                ...oldState,
+                userIsMember: false,
+                members: oldState.members.filter(mem => mem._id != msg.result)
+            };
+        }
+    };
+}
+
 export function useAppData() {
     const initialData = {
         profile: { loggedIn: false },
-        groups: []
+        groups: [],
+        searchResults: []
     };
     return useReducerTree(
         initialData,
         {
             profile: { },
             groups: {
-                element: {
-                    events: {
-                        element: {
-                            $event_edit(oldState, msg) {
-                                if(msg.pending) return oldState;
-                                return {
-                                    ...oldState,
-                                    title: msg.result.title,
-                                    datetime: msg.result.date,
-                                    description: msg.result.desc
-                                };
-                            }
-                        },
-                        $event_new(oldState, msg) {
-                            if(msg.pending) return oldState;
-                            msg.result.datetime = new Date(msg.result.datetime);
-                            return [...oldState, msg.result];
-                        },
-                        $event_delete(oldState, msg) {
-                            if(msg.pending) return oldState;
-                            return oldState.filter(ev => ev._id != msg.result);
-                        }
-                    },
-                    members: {
-                        element: {},
-                    },
-                    $group_load(oldState, msg) {
-                        if(msg.pending) return {...oldState, loading: true};
-                        if(msg.error)
-                            return {...oldState, loading: false, loaded: true, notFound: msg.error.response.status == 404};
-                        const res = msg.result;
-                        return {
-                            ...oldState,
-                            loaded: true,
-                            loading: false,
-                            name: res.name,
-                            image: res.image,
-                            desc: res.description,
-                            owner: res.owner,
-                            members: res.members,
-                            events: res.events.map(ev => ({...ev, datetime: new Date(ev.datetime)}))
-                        };
-                    },
-                    $group_join(oldState, msg) {
-                        if(msg.pending) return oldState;
-                        return {
-                            ...oldState,
-                            userIsMember: true,
-                            members: [...oldState.members, msg.result.member]
-                        };
-                    },
-                    $group_leave(oldState, msg) {
-                        if(msg.pending) return oldState;
-                        console.log('GL', msg.id);
-                        return {
-                            ...oldState,
-                            userIsMember: false,
-                            members: oldState.members.filter(mem => mem._id != msg.result)
-                        };
-                    }
-                },
+                element: singleGroupReducers(),
                 $group_new(oldState, msg) {
                     if(msg.pending) return oldState;
                     const existingGroup = oldState.find(g => g._id == msg.result.id);
@@ -175,6 +181,13 @@ export function useAppData() {
                 $group_delete(oldState, msg) {
                     if(msg.pending || msg.error) return oldState;
                     return oldState.map(g => g._id == msg.result.groupId ? {loaded: true, notFound: true, _id: g._id} : g);
+                }
+            },
+            searchResults: {
+                elements: {},
+                $group_search_res(oldState, msg) {
+                    if(msg.pending) return oldState;
+                    return msg.result;
                 }
             },
             $user_login(oldState, msg) {
@@ -210,6 +223,8 @@ export const api = {
             }
         }),
         register: makeAsyncApi('user_login', async (userInfo) => {
+            const picId = (await axios.post('/api/upload/img', {})).data;
+            userInfo.profilePicture = picId;
             return (await axios.post('/api/register', userInfo)).data;
         })
     },
@@ -243,6 +258,11 @@ export const api = {
             await axios.delete(`/api/group/${groupId}/members`);
             cb();
             return this.data.profile._id;
+        }),
+        search: makeAsyncApi('group_search_res', async function(query) {
+            query = query.trim();
+            if(query.length == 0) return [];
+            return (await axios.get('/api/group/search', { params: { q: query } })).data;
         })
     },
     events: {

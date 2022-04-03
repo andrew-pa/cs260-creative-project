@@ -3,6 +3,26 @@ import bcrypt from 'bcrypt';
 import { handleInternalError, validateSession, validStr } from '../common.js';
 
 export default function(app) {
+    app.get('/group/search', async (req, res) => {
+        try {
+            let groupsFromDesc = await Group.find({ 
+                $text: { $search: req.query.q }
+            }).select('_id name').exec();
+            let groupsFromName = await Group.find({
+                $expr:{ $function: {
+                    body: "function(name, q) { return name.toLowerCase().indexOf(q) > -1; }",
+                    args: [ "$name", req.query.q.toLowerCase() ],
+                    lang: 'js'
+                } }
+            }).select("_id name").exec();
+            console.log(groupsFromDesc, groupsFromName);
+            let groups = (groupsFromDesc||[]).concat(groupsFromName||[]);
+            res.send(groups);
+        } catch(err) {
+            return handleInternalError(err, res);
+        }
+    });
+
     app.get('/group/:id', async (req, res) => {
         try {
             if(req.params.id === 'undefined') {

@@ -4,6 +4,8 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import userApis from './api/users.js';
 import groupApis from './api/groups.js';
+import multer from 'multer';
+import { v4 } from 'uuid';
 
 await mongoose.connect('mongodb://localhost:27017/commonagenda');
 
@@ -21,6 +23,20 @@ api.use((req, res, next) => {
 
 userApis(api);
 groupApis(api);
+
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: './upload',
+        filename: (_, file, cb) => {
+            console.log(file);
+            cb(null, v4());
+        }
+    })
+});
+
+api.post('/upload/img', upload.single('img'), async (req, res) => {
+    res.send(req.file);
+});
 
 app.use('/api', api);
 

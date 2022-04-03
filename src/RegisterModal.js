@@ -58,7 +58,7 @@ export function RegisterModal({data, dispatch, visible, handleClose}) {
                         <Form.Label column sm={2}>Profile Picture:</Form.Label>
                         <Col>
                             <Form.Control type="file"
-                                value={formData.profilePicture} onChange={formData.setProfilePictureFromInput}/>
+                                value={formData.profilePicture} onChange={(e) => formData.setProfilePicture(e.target.files[0])}/>
                         </Col>
                     </Form.Group>
                 </Form>
